@@ -6,7 +6,7 @@ set -u
 # エラー発生時、処理を中断する
 # set -e
 
-echo "symbolic link dotfiles..."
+echo "symlink dotfiles..."
 for f in .??*; do
     [ "$f" = ".git" ] && continue;
     [ "$f" = ".gitignore" ] && continue;
@@ -19,7 +19,7 @@ done
 cat <<EOF
 
 *******************************
-dotfiles symboliclink finised.
+dotfiles symlink finised.
 *******************************
 
 EOF
