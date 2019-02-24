@@ -13,7 +13,7 @@ for f in .??*; do
     [ "$f" = ".DS_Store" ] && continue; # macの場合、このカスみたいなファイルも無視する
 
     # HOMEに各dotfileのシンボリックリンクを貼る
-    ln -snfv ~/dotfiles/"$f" ~/
+    ln -snfv ~/dotfiles/"$f" $HOME
 done
 
 cat <<EOF
