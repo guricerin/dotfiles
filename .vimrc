@@ -8,7 +8,12 @@ set nocompatible
 set number
 
 " シンタックスハイライトを有効化
-syntax enable
+"syntax enable
+syntax on
+colorscheme desert
+
+" コメント文の色をグレイに
+"hi Comment ctermfg=gray
 
 " タイトル表示
 set title
