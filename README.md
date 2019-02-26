@@ -1,6 +1,6 @@
 # dotfiles
 
 
-## Dependency
+## Requirement
 
 * bash
