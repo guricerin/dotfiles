@@ -71,8 +71,6 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
 fi
 
-
-exit 0
 echo "symlink dotfiles..."
 for f in .??*; do
     [ "$f" = ".git" ] && continue;
