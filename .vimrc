@@ -41,3 +41,10 @@ set noexpandtab
 " バックスペースの動作：1文字消しつつ左に移動
 set backspace=indent,eol,start
 set mouse=a
+
+" 閉じかっこ補完
+inoremap { {}<Left>
+inoremap {<Enter> {}<Left><CR><ESC><S-o>
+inoremap [<Enter> []<Left><CR><ESC><S-o>
+inoremap ( ()<ESC>i
+inoremap (<Enter> ()<Left><CR><ESC><S-o>

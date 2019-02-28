@@ -9,8 +9,6 @@
 
 ```bash
 $ git clone https://github.com/guricerin/dotfiles.git
-```
-
-```bash:~dotfiles/
+$ cd dotfiles/
 $ bash install.sh
 ```
