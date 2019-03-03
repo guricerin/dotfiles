@@ -1,10 +1,17 @@
 ;; -*- lexical-binding: t -*-
 
 ;; 新しいリリースまでパッケージはstableを使う
-(push '("melpa-stable" . "stable.melpa.org/packages/") configuration-layer--elpa-archives)
-(push '(use-package . "melpa-stable") package-pinned-packages)
-(push '("marmalade" . "marmalade-repo.org/packages") configuration-layer--elpa-archives)
-(push '(use-package . "marmalade") package-pinned-packages)
+;; (push '("melpa-stable" . "stable.melpa.org/packages/") configuration-layer--elpa-archives)
+;; (push '(use-package . "melpa-stable") package-pinned-packages)
+
+;; パッケージ追加
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages") t)
+;; marmaladeはリンク切れ
+;; (add-to-list 'package-archives
+;;              '("marmalade" . "https://marmalade-repo.org/packages") t)
+(package-initialize)
 
 ;; インデントにtab文字を使用しない
 (setq-default indent-tabs-mode nil)
