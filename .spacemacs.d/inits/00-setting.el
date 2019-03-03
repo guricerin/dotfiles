@@ -3,6 +3,8 @@
 ;; 新しいリリースまでパッケージはstableを使う
 (push '("melpa-stable" . "stable.melpa.org/packages/") configuration-layer--elpa-archives)
 (push '(use-package . "melpa-stable") package-pinned-packages)
+(push '("marmalade" . "marmalade-repo.org/packages") configuration-layer--elpa-archives)
+(push '(use-package . "marmalade") package-pinned-packages)
 
 ;; インデントにtab文字を使用しない
 (setq-default indent-tabs-mode nil)
