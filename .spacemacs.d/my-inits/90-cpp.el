@@ -18,6 +18,9 @@
 
 (add-hook 'c++-mode-hook 'company-mode)
 
+;; lsp
+;; (add-hook 'c++-mode-hook #'lsp)
+
 ;;; clang-formatについて
 ;; cpp layer を導入していたらデフォルトで有効（ただし、aptなりbrewなりでclang-formatをインストールする必要あり）
 ;; SPC SPC clang-format で整形してくれる
