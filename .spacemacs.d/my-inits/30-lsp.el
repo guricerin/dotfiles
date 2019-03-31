@@ -9,6 +9,7 @@
 ;;   :hook ((c-mode c++-mode objc-mode) .
 ;;          (lambda () (require 'ccls) (lsp))))
 
+(setq ccls-executable "~/ccls/Release/ccls")
 ;; eglot
 (use-package eglot
   :bind (:map eglot-mode-map
@@ -16,8 +17,8 @@
               ("C-c C-r" . eglot-code-actions) ;; もっと良いコードを提示
               )
   :hook
-  ;; ((c-mode-common . eglot-ensure))
-  ((c++-mode . eglot-ensure))
+  ((c-mode-common . eglot-ensure))
+  ;; ((c++-mode . eglot-ensure))
   )
 
 (use-package company-lsp
@@ -27,15 +28,17 @@
   ;; :init (cl-pushnew (company-backend-with-yas 'company-lsp) company-backends)
   )
 
-;; cquery(C++のlsp)
-;; 要インストール
-(defun cquery//enable ()
-  (condition-case nil
-      (lsp)
-    (user-error nil)))
-(use-package cquery
-  :commands lsp
-  :init (add-hook 'c-mode-hook #'cquery//enable)
-  (add-hook 'c++-mode-hook #'cquery//enable))
-;; パスを通す
-(setq cquery-executable "~/cquery/build")
+;; ccls(C++のlsp)
+
+;; ;; cquery(C++のlsp)
+;; ;; 要インストール
+;; (defun cquery//enable ()
+;;   (condition-case nil
+;;       (lsp)
+;;     (user-error nil)))
+;; (use-package cquery
+;;   :commands lsp
+;;   :init (add-hook 'c-mode-hook #'cquery//enable)
+;;   (add-hook 'c++-mode-hook #'cquery//enable))
+;; ;; パスを通す
+;; (setq cquery-executable "~/cquery/build")
