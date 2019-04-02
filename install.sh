@@ -91,6 +91,9 @@ for f in .??*; do
     ln -snfv ~/dotfiles/"$f" $HOME
 done
 
+# .config
+cp -rf ./config/ $HOME/.config
+
 os_type
 if [ "$OS" == "mac" ]; then
     VSCODE_PATH="~/Library/Application\ Support/Code/User"
