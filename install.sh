@@ -53,6 +53,21 @@ log() {
     echo "  $1"
 }
 
+OS="unknown"
+
+os_type() {
+    if [ "$(uname)" == 'Darwin' ]; then
+        echo setup for mac
+        OS="mac"
+    elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
+        echo setup for linux
+        OS="linux"
+    else
+        echo "OS is unknown. exit setup."
+        return -1
+    fi
+}
+
 dotfiles_logo='
 '
 echo "$dotfiles_logo"
@@ -75,6 +90,15 @@ for f in .??*; do
     # HOMEに各dotfileのシンボリックリンクを貼る
     ln -snfv ~/dotfiles/"$f" $HOME
 done
+
+os_type
+if [ "$OS" == "mac" ]; then
+    VSCODE_PATH="~/Library/Application\ Support/Code/User"
+    rm -f ~/Library/Application\ Support/Code/User/settings.json
+    ln -snfv ~/dotfiles/vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json
+    rm -f ~/Library/Application\ Support/Code/User/keybindings.json
+    ln -snfv ~/dotfiles/vscode/keybindings.json ~/Library/Application\ Support/Code/User/keybindings.json
+fi
 
 cat <<EOF
 

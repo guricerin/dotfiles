@@ -10,17 +10,24 @@
 ;;          (lambda () (require 'ccls) (lsp))))
 
 (setq ccls-executable "~/ccls/Release/ccls")
+;; ;; eglot
+;; (use-package eglot
+;;   :bind (:map eglot-mode-map
+;;               ("C-c C-d" . eglot-help-at-point) ;; ポイント下の関数のドキュメントを表示
+;;               ("C-c C-r" . eglot-code-actions) ;; もっと良いコードを提示
+;;               )
+;;   :hook
+;;   ((c-mode-common . eglot-ensure))
+;;   )
 ;; eglot
 (use-package eglot
   :bind (:map eglot-mode-map
-              ("C-c C-d" . eglot-help-at-point) ;; ポイント下の関数のドキュメントを表示
-              ("C-c C-r" . eglot-code-actions) ;; もっと良いコードを提示
+              ("C-c C-d" . eglot-help-at-point)
+              ("C-c C-r" . eglot-code-actions)
               )
   :hook
   ((c-mode-common . eglot-ensure))
-  ;; ((c++-mode . eglot-ensure))
   )
-
 (use-package company-lsp
   :after (eglot company)
   :defines company-backends
