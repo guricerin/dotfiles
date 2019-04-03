@@ -68,7 +68,8 @@ os_type() {
     fi
 }
 
-dotfiles_logo='    _        _    __ _ _
+dotfiles_logo='
+    _        _    __ _ _
    | |      | |  / _(_) |
  __| |  ___ | |_| |_ _| | ___  ___
 /  _  |/ _ \| __|  _| | |/ _ \/ __|
@@ -85,7 +86,8 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
 fi
 
-echo "symlink dotfiles..."
+echo ""
+info "symlink dotfiles..."
 cd files/
 for f in .??*; do
     [ "$f" = ".git" ] && continue;
@@ -110,10 +112,4 @@ if [ "$OS" == "mac" ]; then
     ln -snfv ~/dotfiles/vscode/keybindings.json ~/Library/Application\ Support/Code/User/keybindings.json
 fi
 
-cat <<EOF
-
-*******************************
-dotfiles symlink finised.
-*******************************
-
-EOF
+info 'dotfiles symlink finised.'
