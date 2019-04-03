@@ -9,3 +9,6 @@
 ;; 行番号とコードの間にスペースを入れる
 (unless (display-graphic-p)
   (setq linum-format "%3s "))
+
+;; neotreeのアイコン表示
+(setq neo-theme 'arrow)
