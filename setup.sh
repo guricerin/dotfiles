@@ -86,6 +86,7 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
 fi
 
 echo "symlink dotfiles..."
+cd files/
 for f in .??*; do
     [ "$f" = ".git" ] && continue;
     [ "$f" = ".gitignore" ] && continue;
@@ -93,7 +94,7 @@ for f in .??*; do
 
     rm -rf $HOME/"$f"
     # HOMEに各dotfileのシンボリックリンクを貼る
-    ln -snfv $HOME/dotfiles/"$f" $HOME
+    ln -snfv $HOME/dotfiles/files/"$f" $HOME
 done
 
 # .config

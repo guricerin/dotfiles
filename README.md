@@ -10,5 +10,5 @@
 ```bash
 $ git clone https://github.com/guricerin/dotfiles.git
 $ cd dotfiles/
-$ bash install.sh
+$ bash setup.sh
 ```
