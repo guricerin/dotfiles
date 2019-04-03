@@ -94,7 +94,6 @@ for f in .??*; do
     [ "$f" = ".gitignore" ] && continue;
     [ "$f" = ".DS_Store" ] && continue; # macの場合、このカスみたいなファイルも無視する
 
-    rm -rf $HOME/"$f"
     # HOMEに各dotfileのシンボリックリンクを貼る
     ln -snfv $HOME/dotfiles/non-xdg/"$f" $HOME
 done
