@@ -93,11 +93,12 @@ for f in .??*; do
 
     rm -rf $HOME/"$f"
     # HOMEに各dotfileのシンボリックリンクを貼る
-    ln -snfv ~/dotfiles/"$f" $HOME
+    ln -snfv $HOME/dotfiles/"$f" $HOME
 done
 
 # .config
-cp -rf ./config/ $HOME/.config
+# cp -rf ./config/ $HOME/.config
+ln -snfv $HOME/dotfiles/config/ $HOME/.config
 
 os_type
 if [ "$OS" == "mac" ]; then

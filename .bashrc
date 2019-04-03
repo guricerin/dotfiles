@@ -7,7 +7,7 @@ fi
 export XDG_CONFIG_HOME="$HOME/.config"
 
 # tmux
-alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
+# alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
