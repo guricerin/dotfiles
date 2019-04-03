@@ -88,7 +88,7 @@ fi
 
 echo ""
 info "symlink dotfiles..."
-cd files/
+cd non-xdg/
 for f in .??*; do
     [ "$f" = ".git" ] && continue;
     [ "$f" = ".gitignore" ] && continue;
@@ -96,7 +96,7 @@ for f in .??*; do
 
     rm -rf $HOME/"$f"
     # HOMEに各dotfileのシンボリックリンクを貼る
-    ln -snfv $HOME/dotfiles/files/"$f" $HOME
+    ln -snfv $HOME/dotfiles/non-xdg/"$f" $HOME
 done
 
 # .config
