@@ -14,7 +14,7 @@ let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 let s:toml_dir = s:base_dir . '/toml'
 if &runtimepath !~# '/dein.vim'
     if !isdirectory(s:dein_repo_dir)
-        execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+        execute '!git submodule add -f https://github.com/Shougo/dein.vim' s:dein_repo_dir
     endif
     execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
 endif
