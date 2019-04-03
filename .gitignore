@@ -1,3 +1,4 @@
 .bash_history
 config/nvim/plugins/*
 !.gitkeep
+files/*
