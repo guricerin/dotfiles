@@ -4,4 +4,5 @@ config/*
 !config/fish
 !config/alacritty
 !config/nvim
+!config/lxterminal
 !.gitkeep
