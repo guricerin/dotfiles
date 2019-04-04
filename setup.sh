@@ -95,7 +95,7 @@ for f in .??*; do
     [ "$f" = ".DS_Store" ] && continue; # macの場合、このカスみたいなファイルも無視する
 
     # HOMEに各dotfileのシンボリックリンクを貼る
-    ln -snfv $HOME/dotfiles/non-xdg/"$f" $HOME
+    ln -snfv $HOME/dotfiles/non-xdg/"$f" $HOME/$f
 done
 
 # .config
