@@ -1,3 +1,7 @@
 .bash_history
 config/nvim/plugins/*
+config/*
+!config/fish
+!config/alacritty
+!config/nvim
 !.gitkeep
