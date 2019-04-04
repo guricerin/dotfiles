@@ -31,3 +31,7 @@ alias runghc='stack runghc --'
 #export LDFLAGS="-L/usr/local/opt/llvm/lib"
 #export CPPFLAGS="-I/usr/local/opt/llvm/include"
 
+# fishがインストールされているなら実行
+if type fish > /dev/null 2>&1; then
+	exec fish
+fi
