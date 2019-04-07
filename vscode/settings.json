@@ -1,2 +1,18 @@
 {
+    "editor.fontFamily": "Ricty",
+    "editor.fontSize": 16,
+    "terminal.integrated.fontSize": 14,
+    "workbench.colorTheme": "Iceberg",
+
+		"open-in-browser.default": "Chrome",
+
+
+    "vim.useSystemClipboard": true,
+    "vim.hlsearch": true,
+    "vim.easymotion": true,
+    "vim.visualstar": true,
+    "vim.useCtrlKeys": true,
+    "vim.ignorecase": true,
+    "vim.incsearch": true,
+    "vim.sneak": true,
 }
