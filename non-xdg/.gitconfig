@@ -1,3 +1,5 @@
 [user]
 	name = guri
 	email = gurizumi@gmail.com
+[core]
+	editor = vim
