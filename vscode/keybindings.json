@@ -15,17 +15,6 @@
         "command": "editor.action.goToDeclaration",
         "when": "editorFocus"
     },
-    // 手前のエディターに移動
-    {
-        "key": "ctrl+w ctrl+h",
-        "command": "workbench.action.previousEditor",
-        "when": "editorFocus"
-    },
-    {
-        "key": "ctrl+w ctrl+l",
-        "command": "workbench.action.nextEditor",
-        "when": "editorFocus && vim.mode == 'Normal'"
-    },
 
     //----------------------------------------------------------
     // エディターにフォーカスしている時の設定(editor<->sidebarへの移動)
@@ -38,14 +27,8 @@
     },
     // サイドバーからの移動 (ctrl+hをhにしてctrlを話すだけで切り替わる)
     {
-        "key": "ctrl+w ctrl+l",
+        "key": "ctrl+w l",
         "command": "workbench.action.focusFirstEditorGroup",
-        "when": "!editorFocus"
-    },
-    // サイドバーからの移動 (ctrl+hをhにしてctrlを話すだけで切り替わる)
-    {
-        "key": "ctrl+w ctrl+l",
-        "command": "workbench.action.navigateEditorGroups",
         "when": "!editorFocus"
     },
 
@@ -232,19 +215,7 @@
         "key": "ctrl+o g",
         "command": "workbench.view.scm"
     },
-    //----------------------------------------------------------
-    // サイドバーのトグル(*->サイドバーへの移動)
-    //----------------------------------------------------------
-    {
-        "key": "[IntlYen] v",
-        "command": "workbench.view.explorer",
-        "when": "!explorerViewletVisible && vim.mode != 'SearchInProgressMode' && vim.mode != 'Insert'"
-    },
-    {
-        "key": "[IntlYen] v",
-        "command": "workbench.action.toggleSidebarVisibility",
-        "when": "explorerViewletVisible && !searchViewletVisible && !inDebugMode && vim.mode != 'SearchInProgressMode' && vim.mode != 'Insert'"
-    },
+
     //----------------------------------------------------------
     // コマンドパレットオープン(*->コマンドパレット)
     //----------------------------------------------------------
@@ -282,32 +253,13 @@
     // vscodeのterminalのトグル(*->terminal)
     //----------------------------------------------------------
     {
-        "key": "[IntlYen] t",
+        "key": "ctrl+w j",
         "command": "workbench.action.terminal.toggleTerminal",
         "when": "!terminalFocus && vim.mode != 'SearchInProgressMode' && vim.mode != 'Insert'"
     },
     {
-        "key": "[IntlYen] t",
-        "command": "workbench.action.terminal.toggleTerminal",
-        "when": "terminalFocus && vim.mode != 'SearchInProgressMode' && vim.mode != 'Insert'"
-    },
-
-    //----------------------------------------------------------
-    // gitの操作系(uiの移動なし)
-    //----------------------------------------------------------
-    {
-        "key": "g c",
-        "command": "git.commit",
-        "when": "editorTextFocus && vim.mode == 'Normal'"
-    },
-    {
-        "key": "g a",
-        "command": "git.stage",
-        "when": "editorTextFocus && vim.mode == 'Normal'"
-    },
-    {
-        "key": "g g",
-        "command": "cursorTop",
-        "when": "editorTextFocus && vim.mode == 'Normal'"
-    },
+        "key": "ctrl+w k",
+        "command": "workbench.action.focusFirstEditorGroup",
+        "when": "terminalFocus"
+    }
 ]

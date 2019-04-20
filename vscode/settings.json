@@ -2,11 +2,14 @@
     "editor.fontFamily": "Ricty",
     "editor.fontSize": 16,
     "terminal.integrated.fontSize": 14,
-    "workbench.colorTheme": "Iceberg",
 
 		"open-in-browser.default": "Chrome",
 
+		// non tab char
+		"editor.tabSize": 4,
+		"editor.insertSpaces": true,
 
+		// VSCodeVim config
     "vim.useSystemClipboard": true,
     "vim.hlsearch": true,
     "vim.easymotion": true,
@@ -15,4 +18,8 @@
     "vim.ignorecase": true,
     "vim.incsearch": true,
     "vim.sneak": true,
+
+    "workbench.colorTheme": "Zenburn",
+
+		"editor.minimap.enabled": false
 }
