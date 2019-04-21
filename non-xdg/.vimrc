@@ -26,7 +26,7 @@ set autoindent
 set smartindent
 
 " タブ文字を表示する際の見た目上の幅
-set tabstop=2
+" set tabstop=2
 
 " タブキークリック時の幅
 " 0ならtabstopと同じ値

@@ -25,11 +25,22 @@
         "command": "workbench.action.focusSideBar",
         "when": "editorFocus"
     },
-    // サイドバーからの移動 (ctrl+hをhにしてctrlを話すだけで切り替わる)
+    // サイドバーからの移動
     {
         "key": "ctrl+w l",
         "command": "workbench.action.focusFirstEditorGroup",
         "when": "!editorFocus"
+    },
+    // タブ切り替え
+    {
+        "key": "ctrl+t h",
+        "command": "workbench.action.previousEditor",
+        "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+t l",
+        "command": "workbench.action.nextEditor",
+        "when": "editorFocus"
     },
 
     //----------------------------------------------------------
@@ -171,26 +182,41 @@
         "when": "inQuickOpen"
     },
 
-    //----------------------------------------------------------
     // サイドバーでのファイル名編集(ui移動はなし)
-    //----------------------------------------------------------
     {
-        "key": "ctrl+r",
+        "key": "r",
         "command": "renameFile",
         "when": "explorerViewletVisible && filesExplorerFocus"
     },
+    // サイドバーでファイルを削除
     {
-        "key": "Enter",
-        "command": "explorer.openToSide",
+        "key": "d",
+        "command": "deleteFile",
         "when": "explorerViewletVisible && filesExplorerFocus"
     },
-    //----------------------------------------------------------
+    // サイドバーのファイルを別タブで開く(サイドバー -> エディター)
+    {
+        "key": "Enter",
+        "command": "list.select",
+        "when": "explorerViewletVisible && filesExplorerFocus"
+    },
     // サイドバーのファイルをエディターで開く(サイドバー -> エディター)
-    //----------------------------------------------------------
     {
         "key": "ctrl+l",
         "command": "explorer.openToSide",
         "when": "explorerViewletFocus && explorerViewletVisible"
+    },
+    // サイドバーでファイル作成
+    {
+        "key": "n",
+        "command": "explorer.newFile",
+        "when": "explorerViewletFocus && listFocus &&explorerViewletVisible && !inputFocus"
+    },
+    // サイドバーでディレクトリ作成
+    {
+        "key": "shift+n",
+        "command": "explorer.newFolder",
+        "when": "explorerViewletFocus && listFocus &&explorerViewletVisible && !inputFocus"
     },
     //----------------------------------------------------------
     // デバッグモードUI(*->デバッグモードへの移動)
@@ -259,7 +285,7 @@
     },
     {
         "key": "ctrl+w k",
-        "command": "workbench.action.focusFirstEditorGroup",
+        "command": "workbench.action.focusActiveEditorGroup",
         "when": "terminalFocus"
     }
 ]

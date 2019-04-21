@@ -19,7 +19,19 @@
     "vim.incsearch": true,
     "vim.sneak": true,
 
+		//"vim.statusBarColorControl": true,
+		//"vim.statusBarColors.nomal": "#98db99",
+		//"vim.statusBarColors.insert": "#1eb0fc",
+		//"vim.statusBarColors.visual": "#d564d5",
+		//"vim.statusBarColors.visualline": "#d564d5",
+		//"vim.statusBarColors.replace": "#D08770",
+
     "workbench.colorTheme": "Zenburn",
 
-		"editor.minimap.enabled": false
+    "editor.minimap.enabled": false,
+    "workbench.colorCustomizations": {
+      "statusBar.background": "#005f5f",
+      "statusBar.noFolderBackground": "#005f5f",
+      "statusBar.debuggingBackground": "#005f5f"
+    }
 }
