@@ -1,7 +1,6 @@
 filetype plugin indent on
 syntax enable
 
-
 " デフォルトでutf-8のはずだが、念のため
 set encoding=utf-8
 
@@ -25,15 +24,15 @@ set ruler
 set autoindent
 set smartindent
 
+" tabを入力したらspaceに変換
+set expandtab
 " タブ文字を表示する際の見た目上の幅
-" set tabstop=2
-
+set tabstop=2
 " タブキークリック時の幅
 " 0ならtabstopと同じ値
-set softtabstop=0
-
+set softtabstop=4
 " インデント幅
-set shiftwidth=2
+set shiftwidth=4
 
 " タブをスペースに変換
 set noexpandtab
