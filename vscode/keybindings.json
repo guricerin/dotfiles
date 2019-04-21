@@ -48,7 +48,7 @@
     //----------------------------------------------------------
     // grep検索に入る
     {
-        "key": "ctrl+u ctrl+g",
+        "key": "ctrl+s ctrl+g",
         "command": "workbench.action.findInFiles",
         "when": "!searchInputBoxFocus"
     },
@@ -60,7 +60,7 @@
     },
     // ファイルの検索に入る
     {
-        "key": "ctrl+u ctrl+u",
+        "key": "ctrl+s ctrl+f",
         "command": "workbench.action.quickOpen"
     },
 
