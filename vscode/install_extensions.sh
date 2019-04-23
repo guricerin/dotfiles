@@ -1,10 +1,13 @@
-#!bin/bash
+#!/bin/bash
 
 set -eu
 
-extensions=$(cat ./extensions.txt)
+extensions=(
+    vscodevim.vim
+    ms-vscode.cpptools
+    ryanolsonx.zenburn
+)
 
-for extension in $extensions; do
-    echo "install $extension ..."
-    code --install-extension $extension
+for i in ${extensions[@]}; do
+    code --install-extension $i
 done
