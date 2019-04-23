@@ -5,9 +5,12 @@ config/*
 !config/alacritty
 !config/nvim
 !config/lxterminal
-!config/Code
+
+config/Code/*
 !config/Code/User
+config/Code/User/*
 !config/Code/User/keybindings.json
 !config/Code/User/settings.json
 vscode/extensions.txt
+
 !.gitkeep
