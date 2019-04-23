@@ -6,6 +6,7 @@ config/*
 !config/nvim
 !config/lxterminal
 
+!config/Code
 config/Code/*
 !config/Code/User
 config/Code/User/*
