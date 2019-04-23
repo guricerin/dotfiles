@@ -105,11 +105,11 @@ ln -snfv $HOME/dotfiles/config/ $HOME/.config
 
 os_type
 if [ "$OS" == "mac" ]; then
-    VSCODE_PATH="~/Library/Application\ Support/Code/User"
+    VSCODE_PATH="$HOME/dotfiles/config/Code/User"
     rm -f ~/Library/Application\ Support/Code/User/settings.json
-    ln -snfv ~/dotfiles/vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json
+    ln -snfv $VSCODE_PATH/settings.json ~/Library/Application\ Support/Code/User/settings.json
     rm -f ~/Library/Application\ Support/Code/User/keybindings.json
-    ln -snfv ~/dotfiles/vscode/keybindings.json ~/Library/Application\ Support/Code/User/keybindings.json
+    ln -snfv $VSCODE_PATH/keybindings.json ~/Library/Application\ Support/Code/User/keybindings.json
 fi
 
 info 'dotfiles symlink finised.'
