@@ -6,6 +6,8 @@ extensions=(
     vscodevim.vim
     ms-vscode.cpptools
     ryanolsonx.zenburn
+    mechatroner.rainbow-csv
+    CoenraadS.bracket-pair-colorizer
 )
 
 for i in ${extensions[@]}; do

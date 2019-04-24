@@ -13,6 +13,18 @@
   // 貼り付け時に整形
   "editor.formatOnPaste": true,
   "editor.parameterHints": true,
+  // theme
+  "workbench.colorTheme": "Zenburn",
+  "editor.minimap.enabled": false,
+  // "workbench.colorCustomizations": {
+  //   "statusBar.background": "#005f5f",
+  //   "statusBar.noFolderBackground": "#005f5f",
+  //   "statusBar.debuggingBackground": "#005f5f"
+  // }
+
+  // 保存時に末尾の空白を削除
+  "files.trimTrailingWhitespace": true,
+
   // VSCodeVim config
   "vim.useSystemClipboard": true,
   "vim.hlsearch": true,
@@ -28,13 +40,7 @@
   // "vim.statusBarColors.visual": "#d564d5",
   // "vim.statusBarColors.visualline": "#d564d5",
   // "vim.statusBarColors.replace": "#D08770",
-  // theme
-  "workbench.colorTheme": "Zenburn",
-  "editor.minimap.enabled": false,
+
+  // Cpp
   "C_Cpp.updateChannel": "Insiders",
-  // "workbench.colorCustomizations": {
-  //   "statusBar.background": "#005f5f",
-  //   "statusBar.noFolderBackground": "#005f5f",
-  //   "statusBar.debuggingBackground": "#005f5f"
-  // }
 }
