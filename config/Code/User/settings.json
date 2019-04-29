@@ -3,6 +3,7 @@
   "editor.fontSize": 16,
   "terminal.integrated.fontSize": 14,
   "open-in-browser.default": "Chrome",
+  "window.title": "${dirty}${activeEditorLong}${separator}${rootName}",
   // non tab char
   "editor.tabSize": 4,
   "editor.insertSpaces": true,
