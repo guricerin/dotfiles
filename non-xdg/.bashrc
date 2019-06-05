@@ -25,13 +25,8 @@ alias ghci='stack ghci'
 alias ghc='stack ghc --'
 alias runghc='stack runghc --'
 
-# lsp (for C++, macos)
-#export PATH="$HOME/ccls/Release:$PATH"
-#export PATH="/usr/local/opt/llvm/bin:$PATH"
-#export LDFLAGS="-L/usr/local/opt/llvm/lib"
-#export CPPFLAGS="-I/usr/local/opt/llvm/include"
-
 # fishがインストールされているなら実行
 #if type fish > /dev/null 2>&1; then
 #	exec fish
 #fi
+export PATH=$HOME/.nodebrew/current/bin:$PATH
