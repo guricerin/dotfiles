@@ -38,6 +38,6 @@ set shiftwidth=4
 set backspace=indent,eol,start
 set mouse=a
 
-colorscheme darkblue
+" colorscheme darkblue
 
 set title

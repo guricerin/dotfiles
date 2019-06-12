@@ -26,7 +26,8 @@ alias ghc='stack ghc --'
 alias runghc='stack runghc --'
 
 # fishがインストールされているなら実行
-#if type fish > /dev/null 2>&1; then
-#	exec fish
-#fi
-export PATH=$HOME/.nodebrew/current/bin:$PATH
+if type fish > /dev/null 2>&1; then
+	exec fish
+fi
+
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
