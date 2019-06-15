@@ -17,3 +17,17 @@ set __fish_git_prompt_char_untrackedfiles '☡'
 set __fish_git_prompt_char_stashstate '↩'
 set __fish_git_prompt_char_upstream_ahead '+'
 set __fish_git_prompt_char_upstream_behind '-'
+
+
+# --------------------------------------------- #
+
+# Rust
+set PATH $HOME/.cargo/bin $PATH
+set RUST_SRC_PATH $HOME/.multirust/toolchains/nightly-x86_64-apple-darwin/lib/rustlib/src/rust/src
+
+# Haskell
+set PATH $HOME/.local/bin $PATH
+alias ghci='stack ghci'
+alias ghc='stack ghc --'
+alias runghc='stack runghc --'
+
