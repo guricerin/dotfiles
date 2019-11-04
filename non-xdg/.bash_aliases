@@ -9,10 +9,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-if [ -f /usr/local/bin/brew ]; then
-    alias emacs='/usr/local/Cellar/emacs-plus/26.1/bin/emacs-26.1'
-fi
-
 # 詳細表示
 alias ll='ls -alF'
 
