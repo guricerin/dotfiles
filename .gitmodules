@@ -1,3 +1,0 @@
-[submodule "/home/ubuntu/dotfiles/config/nvim/plugins/repos/github.com/Shougo/dein.vim"]
-	path = /home/ubuntu/dotfiles/config/nvim/plugins/repos/github.com/Shougo/dein.vim
-	url = https://github.com/Shougo/dein.vim

@@ -22,10 +22,8 @@
   //   "statusBar.noFolderBackground": "#005f5f",
   //   "statusBar.debuggingBackground": "#005f5f"
   // }
-
   // 保存時に末尾の空白を削除
   "files.trimTrailingWhitespace": true,
-
   // VSCodeVim config
   "vim.useSystemClipboard": true,
   "vim.hlsearch": true,
@@ -41,15 +39,12 @@
   // "vim.statusBarColors.visual": "#d564d5",
   // "vim.statusBarColors.visualline": "#d564d5",
   // "vim.statusBarColors.replace": "#D08770",
-
   // Cpp
   "C_Cpp.updateChannel": "Insiders",
-
   // Javascript
-  "[javascript]" {
+  "[javascript]": {
     "editor.tabSize": 2
   },
-
   // Elm
   "elm.compiler": "./node_modules/.bin/elm",
   "elm.makeCommand": "./node_modules/.bin/elm-make",
