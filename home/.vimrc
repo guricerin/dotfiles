@@ -11,9 +11,6 @@ set number
 "syntax enable
 syntax on
 
-" コメント文の色をグレイに
-"hi Comment ctermfg=gray
-
 " タイトル表示
 set title
 
@@ -37,7 +34,5 @@ set shiftwidth=4
 " バックスペースの動作：1文字消しつつ左に移動
 set backspace=indent,eol,start
 set mouse=a
-
-" colorscheme darkblue
 
 set title

@@ -11,6 +11,7 @@ fi
 
 # 詳細表示
 alias ll='ls -alF'
+alias l='ls -alF'
 
 # カレント、親ディレクトリを除く隠しファイルを表示
 alias la='ls -A'
