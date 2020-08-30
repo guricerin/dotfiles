@@ -16,12 +16,6 @@ if type rbenv > /dev/null 2>&1; then
 	eval "$(rbenv init -)"
 fi
 
-# Haskell
-export PATH="$HOME/.local/bin:$PATH"
-alias ghci='stack ghci'
-alias ghc='stack ghc --'
-alias runghc='stack runghc --'
-
 # fishがインストールされているなら実行
 if type fish > /dev/null 2>&1; then
 	exec fish
