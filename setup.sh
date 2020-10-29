@@ -18,9 +18,16 @@ readonly SCRIPT_ROOT=$(cd $(dirname ${0}); pwd)
 readonly DOTFILES_HOME=${SCRIPT_ROOT}/home
 
 main() {
-    for src in $(find ${DOTFILES_HOME}/ -maxdepth 1); do
-        local dst="${HOME}/`basename ${src}`"
-        [[ ${dst} == "${HOME}/home" ]] && continue
+    # ディレクトリのシムリンクは作成しない
+    for src in $(find ${DOTFILES_HOME}/ -type f); do
+        local dst=${src/${DOTFILES_HOME}/$(echo $HOME)}
+        local parent=$(dirname ${dst})
+        if [ ! -d ${parent} ]; then
+            mkdir -p ${parent}
+        fi
+        if [ -f dst ]; then
+            cp dst ${dst}.bak
+        fi
         ln -snf ${src} ${dst}
         printf "\e[0;32m  [o] ${dst} -> ${src}\e[0m\n"
     done
@@ -28,3 +35,4 @@ main() {
 
 echo "$dotfiles_logo"
 main
+echo ""
