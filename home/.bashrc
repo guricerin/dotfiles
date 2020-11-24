@@ -125,15 +125,8 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export PATH="$HOME/.cargo/bin:$PATH"
 export RUST_SRC_PATH="$HOME/.multirust/toolchains/nightly-x86_64-apple-darwin/lib/rustlib/src/rust/src"
 
-# Ruby
-# rbenvコマンドがある場合のみ
-if type rbenv > /dev/null 2>&1; then
-	eval "$(rbenv init -)"
-fi
-
-# fishがインストールされているなら実行
-if type fish > /dev/null 2>&1; then
-	exec fish
-fi
-
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+
+# posh-git-sh https://github.com/lyze/posh-git-sh
+source ~/git-prompt.sh
+PROMPT_COMMAND='__posh_git_ps1 "\u@\h:\w " "\n\$ ";'$PROMPT_COMMAND
