@@ -20,7 +20,7 @@ readonly DOTFILES_HOME=${SCRIPT_ROOT}/home
 main() {
     # ディレクトリのシムリンクは作成しない
     for src in $(find ${DOTFILES_HOME}/ -type f); do
-        local dst=${src/${DOTFILES_HOME}/$(echo $HOME)}
+        local dst=${src/${DOTFILES_HOME}/$(echo $HOME)} # 文字列置換
         local parent=$(dirname ${dst})
         if [ ! -d ${parent} ]; then
             mkdir -p ${parent}
