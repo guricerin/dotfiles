@@ -21,15 +21,15 @@ set ruler
 set autoindent
 set smartindent
 
-" tabを入力したらspaceに変換
-set expandtab
 " タブ文字を表示する際の見た目上の幅
-set tabstop=4
+set tabstop=8
 " タブキークリック時の幅
 " 0ならtabstopと同じ値
 set softtabstop=4
 " インデント幅
 set shiftwidth=4
+" tabを入力したらspaceに変換
+set expandtab
 
 " バックスペースの動作：1文字消しつつ左に移動
 set backspace=indent,eol,start

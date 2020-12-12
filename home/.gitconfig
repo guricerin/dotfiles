@@ -1,10 +1,10 @@
 [user]
-	name = guricerin
-	email = chanbo1e9@gmail.com
+    name = guricerin
+    email = chanbo1e9@gmail.com
 [core]
-	editor = vim
+    editor = vim
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [alias]
     st = status
     br = branch
