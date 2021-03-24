@@ -1,0 +1,19 @@
+[directory]
+truncation_length = 255
+truncate_to_repo = false
+
+[hostname]
+ssh_only = false
+style = "bright-green bold"
+format = "@[$hostname]($style): "
+disabled = false
+
+[username]
+style_user = "bright-blue bold"
+style_red = "red bold"
+format = "[$user]($style)"
+show_always = true
+disabled = false
+
+[git_branch]
+style = "#ff9000 bold"
