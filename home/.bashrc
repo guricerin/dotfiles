@@ -121,9 +121,12 @@ fi
 # config
 export XDG_CONFIG_HOME="$HOME/.config"
 
+# Go
+export PATH="$HOME/go/bin:$PATH"
+export GOPATH="$(go env GOPATH)"
+
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
-export RUST_SRC_PATH="$HOME/.multirust/toolchains/nightly-x86_64-apple-darwin/lib/rustlib/src/rust/src"
 
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
