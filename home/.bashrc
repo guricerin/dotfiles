@@ -131,12 +131,14 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # linuxbrew
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
-# starship
-eval "$(starship init bash)"
-
+# nvm
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# Deno
 export DENO_INSTALL="$HOME/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
+
+# starship
+eval "$(starship init bash)"

@@ -3,9 +3,10 @@ alias rm='rm -i'
 alias mv='mv -i'
 alias cp='cp -i'
 
-# Docker
+alias g='git'
 alias dc='docker'
 alias dcc='docker compose'
+alias k='kubectl'
 
 ## 全コンテナの停止・削除、全イメージの削除を一括で行う
 alias docker-purge='docker stop $(docker ps -q) && docker rmi $(docker images -q) -f'
