@@ -114,31 +114,3 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-#######################################################################################
-# my .bashrc
-
-# config
-export XDG_CONFIG_HOME="$HOME/.config"
-
-# Go
-export PATH="$HOME/go/bin:$PATH"
-export GOPATH="$(go env GOPATH)"
-
-# Rust
-export PATH="$HOME/.cargo/bin:$PATH"
-
-# linuxbrew
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-
-# nvm
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# Deno
-export DENO_INSTALL="$HOME/.deno"
-export PATH="$DENO_INSTALL/bin:$PATH"
-
-# starship
-eval "$(starship init bash)"
