@@ -37,6 +37,9 @@ alias k='kubectl'
 # config
 export XDG_CONFIG_HOME="$HOME/.config"
 
+# linuxbrew
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+
 # Go
 export PATH="$HOME/go/bin:$PATH"
 export GOPATH="$(go env GOPATH)"
@@ -44,8 +47,8 @@ export GOPATH="$(go env GOPATH)"
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# linuxbrew
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+# kubectl completion
+[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
 # nvm
 export NVM_DIR="$HOME/.config/nvm"
