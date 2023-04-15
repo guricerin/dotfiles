@@ -10,7 +10,7 @@ disabled = false
 
 [username]
 style_user = "bright-blue bold"
-style_red = "red bold"
+style_root = "red bold"
 format = "[$user]($style)"
 show_always = true
 disabled = false
