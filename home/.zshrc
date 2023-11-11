@@ -30,8 +30,8 @@ alias mv='mv -i'
 alias cp='cp -i'
 
 alias g='git'
-alias dc='docker'
-alias dcc='docker compose'
+alias d='docker'
+alias dc='docker compose'
 alias k='kubectl'
 
 # config
