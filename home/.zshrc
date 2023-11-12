@@ -59,5 +59,8 @@ export NVM_DIR="$HOME/.nvm"
 export DENO_INSTALL="$HOME/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 
+# asdf
+. /home/linuxbrew/.linuxbrew/opt/asdf/libexec/asdf.sh
+
 # starship
 eval "$(starship init zsh)"
