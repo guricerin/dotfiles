@@ -114,3 +114,5 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
