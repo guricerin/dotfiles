@@ -1,4 +1,4 @@
-name: actionlint
+name: Actionlint
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   actionlint:
-    runs-on: ubuntu22.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 5
     steps:
       - name: Checkout
