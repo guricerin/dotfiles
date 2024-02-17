@@ -1,17 +1,17 @@
 [user]
-    name = guricerin
-    email = chanbo1e9@gmail.com
+	name = guricerin
+	email = chanbo1e9@gmail.com
 [core]
-    editor = vim
-    hookspath = ~/.config/git/hooks
+	editor = vim
+	hookspath = ~/.config/git/hooks
 [init]
-    defaultBranch = main
-    templatedir = /home/guri/.git-templates/git-secrets
+	defaultBranch = main
+	templatedir = /home/guri/.git-templates/git-secrets
 [alias]
-    st = status
-    br = branch
-    cm = commit
-    graph = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
-    sw = switch
+	st = status
+	br = branch
+	cm = commit
+	graph = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
+	sw = switch
 [submodule]
-    recurse = true
+	recurse = true
