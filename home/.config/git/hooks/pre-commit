@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# 注意: グローバルな core.hookspath が設定されていると、リポジトリ単位での pre-commit hook は実行されない。ただし、リポジトリの core.hookspath が設定されている場合はそちらが優先される (例えば husky はリポジトリに core.hookspath を設定する)。
+
+readonly HOOK_NAME="$(basename "$0")"
+
+# 設定ファイルがあれば pre-commit (https://pre-commit.com) を実行する
+pre_commit_maybe() {
+  if ! [[ -e .pre-commit-config.yaml ]]; then
+    return 0
+  fi
+
+  if command -v pre-commit > /dev/null; then
+    exec pre-commit hook-impl --config=.pre-commit-config.yaml --hook-type="${HOOK_NAME}" --hook-dir=".git/hooks" "$@"
+  else
+    echo 'error: `.pre-commit-config.yaml` exists, but `pre-commit` command not found' 1>&2
+    exit 1
+  fi
+}
+
+pre_commit_maybe "$@"
