@@ -6,7 +6,6 @@
 	hookspath = ~/.config/git/hooks
 [init]
 	defaultBranch = main
-	templatedir = /home/guri/.git-templates/git-secrets
 [alias]
 	st = status
 	br = branch
