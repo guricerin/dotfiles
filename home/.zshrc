@@ -50,9 +50,11 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # kubectl completion
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
-# Deno
-export DENO_INSTALL="$HOME/.deno"
-export PATH="$DENO_INSTALL/bin:$PATH"
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
 # asdf
 . /home/linuxbrew/.linuxbrew/opt/asdf/libexec/asdf.sh
