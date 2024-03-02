@@ -5,11 +5,9 @@
 ### SSH setting of GitHub
 
 ```sh
-ssh-keygen -t ed25519
-cd ~/.ssh
-mkdir github
-mv id_25519* github/
-cat github/id_25519.pub
+mkdir -p ~/.ssh/github
+ssh-keygen -t ed25519 -f ~/.ssh/github/id_ed25519
+cat ~/.ssh/github/id_ed25519.pub
 # paste pub-key to GitHub -> Settings -> SSH and GPG keys -> SSH keys
 ```
 
