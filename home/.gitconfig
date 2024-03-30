@@ -14,3 +14,5 @@
 	sw = switch
 [submodule]
 	recurse = true
+[pull]
+	rebase = false
