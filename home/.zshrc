@@ -34,6 +34,9 @@ alias d='docker'
 alias dc='docker compose'
 alias k='kubectl'
 
+# wsl2 default browser
+export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe"
+
 # config
 export XDG_CONFIG_HOME="$HOME/.config"
 
