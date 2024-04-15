@@ -13,6 +13,8 @@ compinit
 #######################################################################################
 # my .zshrc
 
+### aliases ###
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -33,6 +35,8 @@ alias g='git'
 alias d='docker'
 alias dc='docker compose'
 alias k='kubectl'
+
+### PATH ###
 
 # wsl2 default browser
 export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe"
