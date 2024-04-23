@@ -35,8 +35,12 @@ alias g='git'
 alias d='docker'
 alias dc='docker compose'
 alias k='kubectl'
+alias tf='terraform'
 
 ### PATH ###
+
+# my-bin
+export PATH="$HOME/bin:$PATH"
 
 # wsl2 default browser
 export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe"
