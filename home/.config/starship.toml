@@ -1,3 +1,5 @@
+# @see https://starship.rs/
+
 [directory]
 truncation_length = 255
 truncate_to_repo = false
@@ -17,3 +19,9 @@ disabled = false
 
 [git_branch]
 style = "#ff9000 bold"
+
+# @see https://starship.rs/config/#kubernetes
+[kubernetes]
+disabled = false
+format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)]($style) '
+style = "dimmed green"
