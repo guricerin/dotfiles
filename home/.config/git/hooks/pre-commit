@@ -11,7 +11,7 @@ pre_commit_maybe() {
   fi
 
   if command -v pre-commit > /dev/null; then
-    exec pre-commit hook-impl --config=.pre-commit-config.yaml --hook-type="${HOOK_NAME}" --hook-dir=".git/hooks" "$@"
+    exec pre-commit hook-impl --config=.pre-commit-config.yaml --hook-type="$HOOK_NAME" --hook-dir=".git/hooks" "$@"
   else
     echo 'error: `.pre-commit-config.yaml` exists, but `pre-commit` command not found' 1>&2
     exit 1
