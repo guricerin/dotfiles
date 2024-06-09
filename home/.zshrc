@@ -55,11 +55,10 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # linuxbrew
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
-# Go
-export PATH="$HOME/go/bin:$PATH"
+# Go (via brew)
 export GOPATH="$(go env GOPATH)"
 
-# Rust
+# Rust (via rustup)
 export PATH="$HOME/.cargo/bin:$PATH"
 
 # bun completions
