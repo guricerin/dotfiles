@@ -31,6 +31,17 @@ alias cp='cp -i'
 
 alias g='git'
 
+# fzf
+alias f='fzf'
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+## .gitディレクトリを除外し、カレントディレクトリ以下のディレクトリとファイルを再帰的に曖昧検索
+export FZF_DEFAULT_COMMAND='fd -H -E .git'
+## 検索結果はターミナルの下側に表示させる
+export FZF_DEFAULT_OPTS="--reverse --height=90%"
+## CTRL + T でカレントディレクトリ以下のファイルをプレビュー表示しつつ曖昧検索
+export FZF_CTRL_T_COMMAND='fd --type f -H -E .git'
+export FZF_CTRL_T_OPTS='--preview "head -100 {}"'
+
 # docker
 alias d='docker'
 alias dc='docker compose'
@@ -46,8 +57,10 @@ alias tf='terraform'
 # my-bin
 export PATH="$HOME/bin:$PATH"
 
-# wsl2 default browser
-export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe"
+if [[ "$(uname -r)" == *-microsoft-standard-WSL2 ]]; then
+  # wsl2 default browser
+  export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe"
+fi
 
 # config
 export XDG_CONFIG_HOME="$HOME/.config"

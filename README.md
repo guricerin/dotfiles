@@ -35,7 +35,8 @@ sudo apt install build-essential procps curl file git
 ### Install tools
 
 ```sh
-brew install zsh starship asdf pre-commit detect-secrets
+brew install zsh fzf fd starship asdf pre-commit detect-secrets
+$(brew --prefix)/opt/fzf/install
 ```
 
 ### Set zsh as default shell
