@@ -31,6 +31,17 @@ alias cp='cp -i'
 
 alias g='git'
 
+# fzf
+alias f='fzf'
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+## .gitディレクトリを除外し、カレントディレクトリ以下のディレクトリとファイルを再帰的に曖昧検索
+export FZF_DEFAULT_COMMAND='fd -H -E .git'
+## 検索結果はターミナルの下側に表示させる
+export FZF_DEFAULT_OPTS="--reverse --height=90%"
+## CTRL + T でカレントディレクトリ以下のファイルをプレビュー表示しつつ曖昧検索
+export FZF_CTRL_T_COMMAND='fd --type f -H -E .git'
+export FZF_CTRL_T_OPTS='--preview "head -100 {}"'
+
 # docker
 alias d='docker'
 alias dc='docker compose'
