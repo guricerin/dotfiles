@@ -34,7 +34,11 @@ export XDG_CONFIG_HOME="$HOME/.config"
 
 alias g='git'
 
-# fzf
+# sheldon: shell用プラグインマネージャー
+## load plugins
+eval "$(sheldon source)"
+
+# fzf: 曖昧検索
 alias f='fzf'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 ## .gitディレクトリを除外し、カレントディレクトリ以下のディレクトリとファイルを再帰的に曖昧検索
@@ -83,5 +87,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # asdf
 . /home/linuxbrew/.linuxbrew/opt/asdf/libexec/asdf.sh
 
-# starship (last line)
+# starship: プロンプト改造
+## ↓は最終行に書くこと
 eval "$(starship init zsh)"
