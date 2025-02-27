@@ -29,6 +29,9 @@ alias rm='rm -i'
 alias mv='mv -i'
 alias cp='cp -i'
 
+# config
+export XDG_CONFIG_HOME="$HOME/.config"
+
 alias g='git'
 
 # fzf
@@ -61,9 +64,6 @@ if [[ "$(uname -r)" == *-microsoft-standard-WSL2 ]]; then
   # wsl2 default browser
   export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe"
 fi
-
-# config
-export XDG_CONFIG_HOME="$HOME/.config"
 
 # linuxbrew
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
