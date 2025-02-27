@@ -57,8 +57,10 @@ alias tf='terraform'
 # my-bin
 export PATH="$HOME/bin:$PATH"
 
-# wsl2 default browser
-export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe"
+if [[ "$(uname -r)" == *-microsoft-standard-WSL2 ]]; then
+  # wsl2 default browser
+  export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe"
+fi
 
 # config
 export XDG_CONFIG_HOME="$HOME/.config"
