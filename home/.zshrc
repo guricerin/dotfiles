@@ -49,7 +49,7 @@ fi
 
 # fzf (via brew): 曖昧検索
 alias f='fzf'
-[[ $commands[fzf] ]] && source <(fzf --zsh)
+source <(fzf --zsh)
 ## .gitディレクトリを除外し、カレントディレクトリ以下のディレクトリとファイルを再帰的に曖昧検索
 export FZF_DEFAULT_COMMAND='fd -H -E .git'
 ## 検索結果はターミナルの下側に表示させる
@@ -65,7 +65,7 @@ alias dc='docker compose'
 # kubernetes
 alias k='kubectl'
 ## kubectl completion
-[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+source <(kubectl completion zsh)
 
 # terraform
 alias tf='terraform'
@@ -75,10 +75,10 @@ export PATH="$HOME/bin:$PATH"
 
 # sheldon (via brew): shell用プラグインマネージャー
 ## load plugins
-[[ $commands[sheldon] ]] && eval "$(sheldon source)"
+eval "$(sheldon source)"
 
 # Go (via brew)
-[[ $commands[go] ]] && export GOPATH="$(go env GOPATH)"
+export GOPATH="$(go env GOPATH)"
 
 # Rust (via rustup)
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -87,7 +87,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 ## bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+source "$HOME/.bun/_bun"
 
 # starship: プロンプト改造
 ## ↓は最終行に書くこと
