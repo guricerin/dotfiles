@@ -15,12 +15,12 @@ compinit
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
+  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  alias ls='ls --color=auto'
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
 fi
 alias l='ls -alF'
 
@@ -41,8 +41,6 @@ if [[ "$(uname -r)" == *-microsoft-standard-WSL2 ]]; then
   export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe"
   # linuxbrew
   export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-  # asdf (via brew)
-  . /home/linuxbrew/.linuxbrew/opt/asdf/libexec/asdf.sh
 elif [[ "$(uname)" == "Darwin" ]]; then
   echo "This is macos"
   # homebrew
@@ -51,7 +49,7 @@ fi
 
 # fzf (via brew): 曖昧検索
 alias f='fzf'
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source <(fzf --zsh)
 ## .gitディレクトリを除外し、カレントディレクトリ以下のディレクトリとファイルを再帰的に曖昧検索
 export FZF_DEFAULT_COMMAND='fd -H -E .git'
 ## 検索結果はターミナルの下側に表示させる
@@ -67,7 +65,7 @@ alias dc='docker compose'
 # kubernetes
 alias k='kubectl'
 ## kubectl completion
-[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+source <(kubectl completion zsh)
 
 # terraform
 alias tf='terraform'
@@ -85,11 +83,11 @@ export GOPATH="$(go env GOPATH)"
 # Rust (via rustup)
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+## bun completions
+source "$HOME/.bun/_bun"
 
 # starship: プロンプト改造
 ## ↓は最終行に書くこと
