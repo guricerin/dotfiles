@@ -5,13 +5,12 @@ set -u
 # エラー発生時、処理を中断する
 set -e
 
-readonly LOGO='
-    _        _    __ _ _
-   | |      | |  / _(_) |
- __| |  ___ | |_| |_ _| | ___  ___
-/  _  |/ _ \| __|  _| | |/ _ \/ __|
-| (_| | (_) | |_| | | | |  __/\__ \
- \____|\___/ \__|_| |_|_|\___||___/
+# https://patorjk.com/software/taag/#p=display&f=Efti%20Wall&t=dotfiles
+readonly LOGO=$'
+        ...       #   ___                          _          .      .      _     _         |"|
+   o,*,(o o)      #  <_*_>         ()_()         _|_|_      .  .:::.      o\' \,=./ `o      _|_|_       `  _ ,  \'
+  8(o o)(_)Ooo    #  (o o)         (o o)         (o o)        :(o o):  .     (o o)         (o o)      -  (o)o)  -
+ooO-(_)---Ooo-----8---(_)--Ooo-ooO--`o\'--Ooo-ooO--(_)--Ooo-ooO--(_)--Ooo-ooO--(_)--Ooo-ooO--(_)--Ooo--ooO\'(_)--Ooo-
 '
 
 readonly SCRIPT_ROOT=$(cd $(dirname $0); pwd)
