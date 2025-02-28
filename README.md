@@ -1,6 +1,9 @@
 # dotfiles
 
-## Usage
+- [home ディレクトリ](./home/)配下のファイルを参照するシムリンクを、`$HOME`に再帰的に作成する
+- 意図しないファイルがリポジトリに含まれるのを防止したいので、ディレクトリのシムリンクは作成しない
+
+## Before Setup
 
 ### SSH setting of GitHub
 
@@ -11,18 +14,7 @@ cat ~/.ssh/github/id_ed25519.pub
 # paste pub-key to GitHub -> Settings -> SSH and GPG keys -> SSH keys
 ```
 
-### Setup
-
-```sh
-cd $HOME
-git clone git@github.com:guricerin/dotfiles.git
-cd dotfiles/
-bash setup.sh
-```
-
-## After Setup
-
-### Install linuxbrew
+### Install Homebrew
 
 ```sh
 sudo apt install build-essential procps curl file git
@@ -41,15 +33,30 @@ brew install \
   fzf \
   fd \
   starship \
-  asdf \
   pre-commit \
   detect-secrets
 $(brew --prefix)/opt/fzf/install
 ```
+
+## Setup
+
+```sh
+cd $HOME
+git clone git@github.com:guricerin/dotfiles.git
+./dotfiles/setup.sh
+```
+
+## After Setup
 
 ### Set zsh as default shell
 
 ```sh
 echo `which zsh` | sudo tee -a /etc/shells
 chsh -s `which zsh`
+```
+
+### Load zsh config
+
+```sh
+source ~/.zshrc
 ```
