@@ -1,6 +1,8 @@
 [user]
 	name = guricerin
 	email = chanbo1e9@gmail.com
+[includeIf "gitdir:~/workspace/github.com/sensyn-robotics/"]
+	path = ~/.config/git/sensyn-robotics.config
 [core]
 	editor = vim
 	hookspath = ~/.config/git/hooks
