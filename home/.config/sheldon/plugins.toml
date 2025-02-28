@@ -14,5 +14,8 @@ shell = "zsh"
 
 [plugins]
 
+[plugins.zsh-syntax-highlighting]
+github = "zsh-users/zsh-syntax-highlighting"
+
 [plugins.jq-zsh-plugin]
 github = "reegnz/jq-zsh-plugin"
