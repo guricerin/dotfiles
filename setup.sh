@@ -16,7 +16,8 @@ ooO-(_)---Ooo-----8---(_)--Ooo-ooO--`o\'--Ooo-ooO--(_)--Ooo-ooO--(_)--Ooo-ooO--(
 readonly SCRIPT_ROOT=$(cd $(dirname $0); pwd)
 readonly DOTFILES_HOME="$SCRIPT_ROOT/home"
 
-_build_symlink() {
+build_symlink() {
+  echo "Start to build symlink."
   # 意図しないファイルがリポジトリに含まれるのを防止したいので、ディレクトリのシムリンクは作成しない
   for src in $(find $DOTFILES_HOME -type f); do
     echo "---"
@@ -34,10 +35,10 @@ _build_symlink() {
   done
 }
 
-_main() {
+main() {
   echo "$LOGO"
-  _build_symlink
+  build_symlink
   echo -e "\n ようこそ、dotfiles へ。\n そして、あなたの帰還に感謝します。"
 }
 
-_main
+main

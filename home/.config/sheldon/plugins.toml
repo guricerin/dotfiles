@@ -14,5 +14,12 @@ shell = "zsh"
 
 [plugins]
 
+# 右カーソルキーで、suggestされたコマンドを入力
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+
+[plugins.zsh-syntax-highlighting]
+github = "zsh-users/zsh-syntax-highlighting"
+
 [plugins.jq-zsh-plugin]
 github = "reegnz/jq-zsh-plugin"

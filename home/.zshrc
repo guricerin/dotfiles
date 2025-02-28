@@ -32,13 +32,24 @@ alias cp='cp -i'
 # config
 export XDG_CONFIG_HOME="$HOME/.config"
 
+# git
 alias g='git'
 
-# sheldon: shell用プラグインマネージャー
-## load plugins
-eval "$(sheldon source)"
+if [[ "$(uname -r)" == *-microsoft-standard-WSL2 ]]; then
+  echo "This is wsl2"
+  # wsl2 default browser
+  export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe"
+  # linuxbrew
+  export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+  # asdf (via brew)
+  . /home/linuxbrew/.linuxbrew/opt/asdf/libexec/asdf.sh
+elif [[ "$(uname)" == "Darwin" ]]; then
+  echo "This is macos"
+  # homebrew
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
-# fzf: 曖昧検索
+# fzf (via brew): 曖昧検索
 alias f='fzf'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 ## .gitディレクトリを除外し、カレントディレクトリ以下のディレクトリとファイルを再帰的に曖昧検索
@@ -64,13 +75,9 @@ alias tf='terraform'
 # my-bin
 export PATH="$HOME/bin:$PATH"
 
-if [[ "$(uname -r)" == *-microsoft-standard-WSL2 ]]; then
-  # wsl2 default browser
-  export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe"
-fi
-
-# linuxbrew
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+# sheldon (via brew): shell用プラグインマネージャー
+## load plugins
+eval "$(sheldon source)"
 
 # Go (via brew)
 export GOPATH="$(go env GOPATH)"
@@ -83,9 +90,6 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-
-# asdf
-. /home/linuxbrew/.linuxbrew/opt/asdf/libexec/asdf.sh
 
 # starship: プロンプト改造
 ## ↓は最終行に書くこと
