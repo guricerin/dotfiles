@@ -41,8 +41,6 @@ if [[ "$(uname -r)" == *-microsoft-standard-WSL2 ]]; then
   export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe"
   # linuxbrew
   export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-  # asdf (via brew)
-  . /home/linuxbrew/.linuxbrew/opt/asdf/libexec/asdf.sh
 elif [[ "$(uname)" == "Darwin" ]]; then
   echo "This is macos"
   # homebrew
