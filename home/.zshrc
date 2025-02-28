@@ -51,7 +51,7 @@ fi
 
 # fzf (via brew): 曖昧検索
 alias f='fzf'
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[[ $commands[fzf] ]] && source <(fzf --zsh)
 ## .gitディレクトリを除外し、カレントディレクトリ以下のディレクトリとファイルを再帰的に曖昧検索
 export FZF_DEFAULT_COMMAND='fd -H -E .git'
 ## 検索結果はターミナルの下側に表示させる
