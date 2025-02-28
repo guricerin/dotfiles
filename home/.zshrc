@@ -75,19 +75,19 @@ export PATH="$HOME/bin:$PATH"
 
 # sheldon (via brew): shell用プラグインマネージャー
 ## load plugins
-eval "$(sheldon source)"
+[[ $commands[sheldon] ]] && eval "$(sheldon source)"
 
 # Go (via brew)
-export GOPATH="$(go env GOPATH)"
+[[ $commands[go] ]] && export GOPATH="$(go env GOPATH)"
 
 # Rust (via rustup)
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+## bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # starship: プロンプト改造
 ## ↓は最終行に書くこと
