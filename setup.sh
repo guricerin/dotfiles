@@ -14,14 +14,14 @@ ooO-(_)---Ooo-----8---(_)--Ooo-ooO--`o\'--Ooo-ooO--(_)--Ooo-ooO--(_)--Ooo-ooO--(
 '
 
 readonly SCRIPT_ROOT=$(cd $(dirname $0); pwd)
-readonly DOTFILES_HOME="$SCRIPT_ROOT/home"
+readonly DOTFILES_HOME_ABS_PATH="$SCRIPT_ROOT/home"
 
 build_symlink() {
   echo "Start to build symlink."
   # 意図しないファイルがリポジトリに含まれるのを防止したいので、ディレクトリのシムリンクは作成しない
-  for src in $(find $DOTFILES_HOME -type f); do
+  for src in $(find $DOTFILES_HOME_ABS_PATH -type f); do
     echo "---"
-    local dst=${src/$DOTFILES_HOME/$(echo $HOME)} # 文字列置換
+    local dst=${src/$DOTFILES_HOME_ABS_PATH/$(echo $HOME)} # e.g. /home/username/dotfiles/home/.zshrc => /home/username/.zshrc
     local parent=$(dirname $dst)
     if [ ! -d $parent ]; then
       mkdir -p $parent
