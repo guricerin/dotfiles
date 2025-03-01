@@ -34,7 +34,7 @@ brew install \
   fd \
   starship \
   pre-commit \
-  detect-secrets
+  gitleaks
 $(brew --prefix)/opt/fzf/install
 ```
 
