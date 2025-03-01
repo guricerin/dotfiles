@@ -2,5 +2,6 @@ repos:
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.24.0
     hooks:
+      # 実行されるコマンド: gitleaks git --pre-commit --redact --staged --verbose
+      # https://github.com/gitleaks/gitleaks/blob/v8.24.0/.pre-commit-hooks.yaml#L4
       - id: gitleaks
-        args: ["--staged"]
