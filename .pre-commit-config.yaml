@@ -1,6 +1,7 @@
 repos:
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.4.0
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.0
     hooks:
-      - id: detect-secrets
-        args: ["--baseline", ".secrets.baseline.json"]
+      # 実行されるコマンド: gitleaks git --pre-commit --redact --staged --verbose
+      # https://github.com/gitleaks/gitleaks/blob/v8.24.0/.pre-commit-hooks.yaml#L4
+      - id: gitleaks
