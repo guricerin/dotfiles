@@ -38,7 +38,7 @@ build_symlink() {
 main() {
   echo "$LOGO"
   build_symlink
-  echo -e "\n ようこそ、dotfiles へ。\n そして、あなたの帰還に感謝します。"
+  echo -e "\n ようこそ、$(whoami) の世界へ。\n そして、あなたの帰還に感謝します。"
 }
 
 main
