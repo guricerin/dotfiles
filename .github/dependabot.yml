@@ -1,0 +1,15 @@
+# @see https://docs.github.com/ja/code-security/dependabot/dependabot-version-updates/about-dependabot-version-updates
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
+    groups:
+      all-actions:
+        patterns: ["*"] # 複数のactionに新バージョンが湧いてきた場合、1つのPRで全部更新してくれる
+    reviewers:
+      - "guricerin"

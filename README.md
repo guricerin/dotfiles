@@ -1,4 +1,4 @@
-# dotfiles
+# homebound
 
 - [home ディレクトリ](./home/)配下のファイルを参照するシムリンクを、`$HOME`に再帰的に作成する
 - 意図しないファイルがリポジトリに含まれるのを防止したいので、ディレクトリのシムリンクは作成しない
@@ -34,7 +34,7 @@ brew install \
   fd \
   starship \
   pre-commit \
-  detect-secrets
+  gitleaks
 $(brew --prefix)/opt/fzf/install
 ```
 
@@ -42,8 +42,8 @@ $(brew --prefix)/opt/fzf/install
 
 ```sh
 cd $HOME
-git clone git@github.com:guricerin/dotfiles.git
-./dotfiles/setup.sh
+git clone git@github.com:guricerin/homebound.git
+./homebound/setup.sh
 ```
 
 ## After Setup
