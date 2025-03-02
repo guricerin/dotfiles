@@ -25,4 +25,4 @@ style = "#ff9000 bold"
 disabled = false
 symbol = "⎈"
 style = "dimmed green"
-format = 'on [$symbol $context( \($namespace\)) ]($style)'
+format = 'on [$symbol c:$context( \(n:$namespace\)) ]($style)'
