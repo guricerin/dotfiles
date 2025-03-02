@@ -8,13 +8,13 @@
 ### SSH setting of GitHub
 
 ```sh
-mkdir -p ~/.ssh/github
-ssh-keygen -t ed25519 -f ~/.ssh/github/id_ed25519
-cat ~/.ssh/github/id_ed25519.pub
+mkdir -p ~/.ssh/keys/github
+ssh-keygen -t ed25519 -f ~/.ssh/keys/github/id_ed25519
+cat ~/.ssh/keys/github/id_ed25519.pub
 # paste pub-key to GitHub -> Settings -> SSH and GPG keys -> SSH keys
 ```
 
-### Install Homebrew
+### Install depends
 
 ```sh
 sudo apt install build-essential procps curl file git
