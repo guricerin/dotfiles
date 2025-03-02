@@ -14,14 +14,13 @@ ooO--(_)--Ooo--8---(_)--Ooo-ooO--(_)--Ooo-ooO--(_)--Ooo-ooO--(_)--Ooo--8---(_)--
 '
 
 readonly SCRIPT_ROOT=$(cd $(dirname $0); pwd)
-readonly HOMEBOUND_ABS_PATH="$SCRIPT_ROOT/home"
+readonly DOTFILES_HOME="$SCRIPT_ROOT/home"
 
-build_symlink() {
-  echo "Start to build symlinks."
+build_symlinks() {
   # 意図しないファイルがリポジトリに含まれるのを防止したいので、ディレクトリのシムリンクは作成しない
-  for src in $(find $HOMEBOUND_ABS_PATH -type f); do
+  for src in $(find $DOTFILES_HOME -type f); do
     echo "---"
-    local dst=${src/$HOMEBOUND_ABS_PATH/$(echo $HOME)} # e.g. /home/username/homebound/home/.zshrc => /home/username/.zshrc
+    local dst=${src/$DOTFILES_HOME/$(echo $HOME)} # e.g. /home/username/homebound/home/.zshrc => /home/username/.zshrc
     local parent=$(dirname $dst)
     if [ ! -d $parent ]; then
       mkdir -p $parent
@@ -35,10 +34,38 @@ build_symlink() {
   done
 }
 
-main() {
-  echo "$LOGO"
-  build_symlink
-  echo -e "\n ようこそ、$(whoami) の世界へ。\n そして、あなたの帰還に感謝します。"
+print_expectation() {
+  for src in $(find $DOTFILES_HOME -type f); do
+    local dst=${src/$DOTFILES_HOME/$(echo $HOME)}
+    printf "\e[0;34m  [?] $dst -> $src\e[0m\n"
+  done
 }
 
-main
+declare -g IS_APPLY_MODE=0
+
+parse_args() {
+  for arg in "$@"; do
+    case $arg in
+      -a|--apply)
+        IS_APPLY_MODE=1
+        ;;
+      *)
+        ;;
+    esac
+  done
+}
+
+main() {
+  parse_args "$@"
+  if [ $IS_APPLY_MODE -eq 1 ]; then
+    echo "$LOGO"
+    echo -e "apply\n"
+    build_symlinks
+    echo -e "\n ようこそ、$(whoami) の世界へ。\n そして、あなたの帰還に感謝します。"
+  else
+    echo -e "dry-run\n"
+    print_expectation
+  fi
+}
+
+main "$@"

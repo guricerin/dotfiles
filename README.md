@@ -5,15 +5,6 @@
 
 ## Before Setup
 
-### SSH setting of GitHub
-
-```sh
-mkdir -p ~/.ssh/keys/github
-ssh-keygen -t ed25519 -f ~/.ssh/keys/github/id_ed25519
-cat ~/.ssh/keys/github/id_ed25519.pub
-# paste pub-key to GitHub -> Settings -> SSH and GPG keys -> SSH keys
-```
-
 ### Install depends
 
 ```sh
@@ -23,6 +14,38 @@ sudo apt install build-essential procps curl file git
 
 - https://github.com/Homebrew/install
 - https://docs.brew.sh/Homebrew-on-Linux#requirements
+
+### SSH setting of GitHub
+
+```sh
+mkdir -p ~/.ssh/keys/github
+ssh-keygen -t ed25519 -f ~/.ssh/keys/github/id_ed25519
+cat ~/.ssh/keys/github/id_ed25519.pub
+# paste pub-key to GitHub -> Settings -> SSH and GPG keys -> SSH keys
+```
+
+### Clone this repo
+
+```sh
+cd $HOME
+git clone git@github.com:guricerin/homebound.git
+```
+
+## Setup
+
+### dry-run
+
+```sh
+./path/to/homebound/setup.sh
+```
+
+### apply
+
+```sh
+./path/to/homebound/setup.sh --apply
+```
+
+## After Setup
 
 ### Install tools
 
@@ -37,16 +60,6 @@ brew install \
   gitleaks
 $(brew --prefix)/opt/fzf/install
 ```
-
-## Setup
-
-```sh
-cd $HOME
-git clone git@github.com:guricerin/homebound.git
-./homebound/setup.sh
-```
-
-## After Setup
 
 ### Set zsh as default shell
 
