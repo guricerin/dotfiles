@@ -5,8 +5,8 @@
     {
       "context": "Chat",
       "bindings": {
-        "enter": "chat:newline",
-        "shift+enter": "chat:submit"
+        "enter": "chat:submit",
+        "shift+enter": "chat:newline"
       }
     }
   ]
