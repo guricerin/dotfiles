@@ -21,7 +21,6 @@ sudo apt install build-essential procps curl file git
 ```sh
 mkdir -p ~/.ssh/keys/github
 ssh-keygen -t ed25519 -f ~/.ssh/keys/github/id_ed25519
-cp ~/.ssh/keys/github/id_ed25519 ~/.ssh/
 cat ~/.ssh/keys/github/id_ed25519.pub
 # paste pub-key to GitHub -> Settings -> SSH and GPG keys -> SSH keys
 ```
@@ -30,7 +29,8 @@ cat ~/.ssh/keys/github/id_ed25519.pub
 
 ```sh
 cd $HOME
-git clone git@github.com:guricerin/homebound.git
+# ~/.ssh/config は setup 後にリンクされるので、この時点では使う鍵を直接指定する
+GIT_SSH_COMMAND='ssh -i ~/.ssh/keys/github/id_ed25519' git clone git@github.com:guricerin/homebound.git
 ```
 
 ## Setup
