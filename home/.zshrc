@@ -117,8 +117,6 @@ ABBR_REGULAR_ABBREVIATION_GLOB_PREFIXES+=(
 )
 abbr -S wh='which' >> /dev/null
 abbr -S g='git' >> /dev/null
-## jujutsu (jj): https://github.com/jj-vcs/jj
-abbr -S j='jj' >> /dev/null
 abbr -S f='fzf' >> /dev/null
 abbr -S d='docker' >> /dev/null
 abbr -S dc='docker compose' >> /dev/null
