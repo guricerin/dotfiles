@@ -1,4 +1,4 @@
-# homebound
+# dotfiles
 
 - [home ディレクトリ](./home/)配下のファイルを参照するシムリンクを、`$HOME`に再帰的に作成する
 - 意図しないファイルがリポジトリに含まれるのを防止したいので、ディレクトリのシムリンクは作成しない
@@ -30,7 +30,7 @@ cat ~/.ssh/keys/github/id_ed25519.pub
 ```sh
 cd $HOME
 # ~/.ssh/config は setup 後にリンクされるので、この時点では使う鍵を直接指定する
-GIT_SSH_COMMAND='ssh -i ~/.ssh/keys/github/id_ed25519' git clone git@github.com:guricerin/homebound.git
+GIT_SSH_COMMAND='ssh -i ~/.ssh/keys/github/id_ed25519' git clone git@github.com:guricerin/dotfiles.git
 ```
 
 ## Setup
@@ -38,13 +38,13 @@ GIT_SSH_COMMAND='ssh -i ~/.ssh/keys/github/id_ed25519' git clone git@github.com:
 ### dry-run
 
 ```sh
-./path/to/homebound/setup.sh
+./path/to/dotfiles/setup.sh
 ```
 
 ### apply
 
 ```sh
-./path/to/homebound/setup.sh --apply
+./path/to/dotfiles/setup.sh --apply
 ```
 
 ## After Setup
@@ -52,7 +52,7 @@ GIT_SSH_COMMAND='ssh -i ~/.ssh/keys/github/id_ed25519' git clone git@github.com:
 ### Install tools
 
 ```sh
-./path/to/homebound/scripts/depends.sh
+./path/to/dotfiles/scripts/depends.sh
 ```
 
 ### Set zsh as default shell
