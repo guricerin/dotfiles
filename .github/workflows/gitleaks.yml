@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   push:
 
+permissions:
+  contents: read
+
 jobs:
   scan:
     runs-on: ubuntu-22.04
