@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   push:
 
+permissions:
+  contents: read
+
 jobs:
   actionlint:
     runs-on: ubuntu-22.04
@@ -15,7 +18,14 @@ jobs:
       - name: Download actionlint
         id: get_actionlint
         shell: bash
-        run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+        env:
+          # main ブランチのスクリプトを直接実行しないよう、リリースのコミットに固定する (v1.7.12)
+          ACTIONLINT_SCRIPT_SHA: 914e7df21a07ef503a81201c76d2b11c789d3fca
+          ACTIONLINT_VERSION: 1.7.12
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/download-actionlint.bash" \
+            "https://raw.githubusercontent.com/rhysd/actionlint/${ACTIONLINT_SCRIPT_SHA}/scripts/download-actionlint.bash"
+          bash "$RUNNER_TEMP/download-actionlint.bash" "$ACTIONLINT_VERSION" "$RUNNER_TEMP"
 
       - name: Check workflow files
         shell: bash
