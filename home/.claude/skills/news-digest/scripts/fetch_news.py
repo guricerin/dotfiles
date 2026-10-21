@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Auth0 とセキュリティ関連のフィードを取得し、期間内の記事を JSON で標準出力に出す。
+"""Auth0・セキュリティ関連・札幌の生活関連のフィードを取得し、期間内の記事を JSON で標準出力に出す。
 
 使い方:
-    python3 fetch_news.py --output-dir <出力先フォルダ> [--since 2026-10-14T09:00] [--days 7]
+    python3 fetch_news.py --output-dir <出力先フォルダ> [--since 2026-10-14T09:00] [--days 7] [--groups sapporo]
 
 - 期間の始まり（since）は、--since 指定 > 出力先にある最新の YYYY-MM-DD-HH-MM.md の時刻 > 現在から --days 日前、の順で決める
+- --groups を付けると、そのグループのソースだけを取得する。出力ファイル名は YYYY-MM-DD-HH-MM-<グループ>.md になり、
+  全部を取得する実行の「前回」としては数えない（一部だけのまとめを起点にすると、他のグループの記事が抜けるため）
 - 取得に失敗したソースがあっても止まらず、sources[].error に理由を入れて残りを続ける
 - 外部ライブラリは使わない（標準ライブラリと gh コマンドだけ）
 """
@@ -16,6 +18,7 @@ import os
 import re
 import subprocess
 import sys
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
@@ -25,7 +28,8 @@ from email.utils import parsedate_to_datetime
 USER_AGENT = "curl/8.7.1"
 TIMEOUT = 30
 SUMMARY_LIMIT = 600
-FILENAME_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})-(\d{2})-(\d{2})\.md$")
+FILENAME_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})-(\d{2})-(\d{2})(?:-([a-z0-9_-]+))?\.md$")
+GROUPS = ["auth0", "security-ja", "security-en", "infra", "advisory", "sapporo"]
 
 # Azure の更新情報は量が多いので、本人の業務（AKS・MySQL Flexible Server・Functions・Entra ID など）に関係しそうなものだけ残す
 AZURE_KEYWORDS = [
@@ -41,6 +45,21 @@ FEEDS = [
     {"name": "BleepingComputer", "group": "security-en", "url": "https://www.bleepingcomputer.com/feed/"},
     {"name": "Kubernetes CVE", "group": "infra", "url": "https://kubernetes.io/docs/reference/issues-security/official-cve-feed/index.json"},
     {"name": "Azure Updates", "group": "infra", "url": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss", "keywords": AZURE_KEYWORDS},
+    # 以下は本人が住む札幌の生活に関係するもの
+    {"name": "札幌市 新着情報", "group": "sapporo", "url": "https://www.city.sapporo.jp/new/shinchaku.xml"},
+    {"name": "札幌市 報道発表", "group": "sapporo", "url": "https://www.city.sapporo.jp/somu/koho/hodo/houdou.xml"},
+    {"name": "北海道新聞", "group": "sapporo", "url": "https://www.hokkaido-np.co.jp/output/7/free/index.ad.xml", "keywords": ["札幌"], "match_summary": True},
+    {"name": "札幌経済新聞", "group": "sapporo", "url": "https://sapporo.keizai.biz/rss.xml"},
+    # 気象庁の防災情報 XML。同じ内容が電文の形式違いで重複して届くので、形式違いの題名を除く
+    {
+        "name": "気象庁 警報・注意報", "group": "sapporo", "url": "https://www.data.jma.go.jp/developer/xml/feed/extra_l.xml",
+        "keywords": ["石狩", "札幌"], "match_summary": True, "exclude_titles": ["（Ｈ２７）", "（Ｒ０６）", "（目撃情報付き）"],
+    },
+    {"name": "気象庁 地震・火山", "group": "sapporo", "url": "https://www.data.jma.go.jp/developer/xml/feed/eqvol_l.xml", "keywords": ["石狩", "札幌"], "match_summary": True},
+    # 動物の出没・交通やライフライン・注意喚起の事件は、まとまったフィードがないので Google ニュースの検索で拾う
+    {"name": "Google ニュース（クマ・シカ）", "group": "sapporo", "url": "https://news.google.com/rss/search?q=" + urllib.parse.quote("札幌 (クマ OR ヒグマ OR シカ) 出没") + "&hl=ja&gl=JP&ceid=JP:ja"},
+    {"name": "Google ニュース（交通・ライフライン）", "group": "sapporo", "url": "https://news.google.com/rss/search?q=" + urllib.parse.quote("札幌 (運休 OR 運転見合わせ OR 通行止め OR 除雪 OR 停電 OR 断水)") + "&hl=ja&gl=JP&ceid=JP:ja"},
+    {"name": "Google ニュース（注意喚起）", "group": "sapporo", "url": "https://news.google.com/rss/search?q=" + urllib.parse.quote("札幌 (逃走 OR 不審者 OR 発砲 OR 刃物 OR 注意喚起)") + "&hl=ja&gl=JP&ceid=JP:ja"},
 ]
 
 # GitHub Advisory は本人が使う言語のエコシステムに絞り、件数が多いので high 以上だけにする
@@ -153,19 +172,20 @@ def fetch_advisories(since):
     return items
 
 
-def find_previous(output_dir):
-    """出力先にある最新の YYYY-MM-DD-HH-MM.md を探す。ファイル名の時刻はローカル時刻として読む"""
+def find_previous(output_dir, suffix):
+    """出力先にある最新のまとめを探す。全部のまとめ（接尾辞なし）と、同じ接尾辞のまとめだけを数える。
+    ファイル名の時刻はローカル時刻として読む"""
     if not os.path.isdir(output_dir):
         return None, None
-    latest = None
+    latest, latest_time = None, None
     for name in os.listdir(output_dir):
         m = FILENAME_RE.match(name)
-        if m and (latest is None or name > latest):
-            latest = name
-    if latest is None:
-        return None, None
-    y, mo, d, h, mi = map(int, FILENAME_RE.match(latest).groups())
-    return latest, datetime(y, mo, d, h, mi).astimezone()
+        if not m or m.group(6) not in (None, suffix):
+            continue
+        t = datetime(*map(int, m.groups()[:5])).astimezone()
+        if latest_time is None or t > latest_time:
+            latest, latest_time = name, t
+    return latest, latest_time
 
 
 def main():
@@ -173,11 +193,16 @@ def main():
     ap.add_argument("--output-dir", required=True)
     ap.add_argument("--since", help="ISO 8601。タイムゾーンなしはローカル時刻")
     ap.add_argument("--days", type=int, default=7, help="前回の出力がないときに遡る日数")
+    ap.add_argument("--groups", help=f"取得するグループをカンマ区切りで指定する（{', '.join(GROUPS)}）。省略時は全部")
     args = ap.parse_args()
+    groups = sorted(set(args.groups.split(","))) if args.groups else None
+    if groups and set(groups) - set(GROUPS):
+        ap.error(f"不明なグループ: {', '.join(sorted(set(groups) - set(GROUPS)))}")
+    suffix = "_".join(groups) if groups else None
 
     now = datetime.now().astimezone()
     warnings = []
-    previous_file, previous_time = find_previous(args.output_dir)
+    previous_file, previous_time = find_previous(args.output_dir, suffix)
     if args.since:
         since = datetime.fromisoformat(args.since)
         since = since.astimezone() if since.tzinfo is None else since
@@ -191,6 +216,8 @@ def main():
 
     sources, items = [], []
     for feed in FEEDS:
+        if groups and feed["group"] not in groups:
+            continue
         entry = {"name": feed["name"], "group": feed["group"], "url": feed["url"], "error": None, "count": 0}
         try:
             data = fetch(feed["url"])
@@ -209,24 +236,27 @@ def main():
         for it in parsed:
             if not it["published"] or it["published"] < since:
                 continue
+            if any(x in (it["title"] or "") for x in feed.get("exclude_titles", [])):
+                continue
             keywords = feed.get("keywords")
             if keywords:
-                haystack = " ".join([it["title"] or ""] + it["categories"])
+                haystack = " ".join([it["title"] or ""] + it["categories"] + ([it["summary"] or ""] if feed.get("match_summary") else []))
                 if not any(k.lower() in haystack.lower() for k in keywords):
                     continue
             items.append({"source": feed["name"], "group": feed["group"], **it})
             entry["count"] += 1
         sources.append(entry)
 
-    entry = {"name": "GitHub Advisory", "group": "advisory", "url": "gh api /advisories", "error": None, "count": 0}
-    try:
-        for it in fetch_advisories(since):
-            if it["published"] and it["published"] >= since:
-                items.append({"source": "GitHub Advisory", "group": "advisory", **it})
-                entry["count"] += 1
-    except Exception as e:
-        entry["error"] = f"{type(e).__name__}: {e}"
-    sources.append(entry)
+    if not groups or "advisory" in groups:
+        entry = {"name": "GitHub Advisory", "group": "advisory", "url": "gh api /advisories", "error": None, "count": 0}
+        try:
+            for it in fetch_advisories(since):
+                if it["published"] and it["published"] >= since:
+                    items.append({"source": "GitHub Advisory", "group": "advisory", **it})
+                    entry["count"] += 1
+        except Exception as e:
+            entry["error"] = f"{type(e).__name__}: {e}"
+        sources.append(entry)
 
     # 同じ URL が複数のフィードに出ることがあるので除く
     seen, unique = set(), []
@@ -244,7 +274,8 @@ def main():
         "until": now.isoformat(timespec="minutes"),
         "since_source": since_source,
         "previous_file": previous_file,
-        "suggested_filename": now.strftime("%Y-%m-%d-%H-%M") + ".md",
+        "groups": groups,
+        "suggested_filename": now.strftime("%Y-%m-%d-%H-%M") + (f"-{suffix}" if suffix else "") + ".md",
         "warnings": warnings,
         "sources": sources,
         "items": unique,
