@@ -5,32 +5,74 @@ description: GitHub にプルリクエストを作成するときに、assignee 
 
 # Assign PR to me
 
-GitHub に PR を作るときは、assignee に自分を入れる。PR 作成の手順そのもの（ブランチ・コミット・本文の書き方、draft にするかなど）は通常どおりで、このスキルは assignee の付与だけを担う。
+GitHub に PR を作るときは、assignee に自分を入れる。誰が担当している PR かを一覧で追えるようにするため。PR 作成の手順そのもの（ブランチ・コミット・本文の書き方、draft にするかなど）は通常どおりで、このスキルは assignee の付与だけを担う。
 
-## PR を作成するとき
+## 停止条件（最優先）
 
-`gh pr create` に `--assignee @me` を付ける。`@me` は gh で認証中のアカウントに解決されるので、ユーザー名を決め打ちしない。
+次のどれかに当てはまったら、作業を進めずに止まり、「停止時の報告」の形でユーザーに返す。推測で埋めて先に進まない。
 
-```bash
-gh pr create --assignee @me --title "..." --body "..."
-```
+- **わからない**:
+  - 作成済みの PR に追加したいと頼まれたが、PR 番号もブランチ名も会話から特定できない
+- **矛盾している**:
+  - ユーザーが「自分は assignee に入れないで」「○○さんを assignee に」と言っている（このスキルの「自分を入れる」とぶつかる）
+  - `gh api user -q .login` で分かる認証中のアカウントが、そのリポジトリで普段使うアカウントと違うように見える（例: 個人のリポジトリなのに会社のアカウントで認証している）
+- **承認が必要**:
+  - 作成済みの PR で、自分以外の人がすでに assignee になっているところに自分を追加すること（他の人の担当 PR に割り込むことになる）
+- **想定外**:
+  - リポジトリへの権限不足などで `gh pr edit --add-assignee` が失敗した
+  - `gh pr create` の出力から作成した PR の URL を取れなかった
 
-他のフラグ（`--draft` や `--base` など）とはそのまま併用できる。
+### 停止時の報告
 
-## 作成済みの PR に追加するとき
+- 事実: 確認できたこと（出典: ファイル名・コマンドの出力・ユーザーの発言）
+- 推測: 事実から推測したこと（根拠つき）
+- 止まった理由: 上のどの停止条件に当たるか
+- 決めてほしいこと: 選択肢と、それぞれを選んだときの影響
 
-付け忘れた場合や、既存の PR が対象の場合は後から追加する。
+## 事実と推測の扱い
 
-```bash
-gh pr edit <PR番号 or ブランチ> --add-assignee @me
-```
+- 推測には「推測:」と明記し、根拠を添える。出典を示せないことは事実として書かない
+- 推測を前提に、取り消せない操作をしない
 
-## 確認
+## 入力
 
-作成・追加の後、自分が assignee に入っていることを確認する。
+- PR を新しく作る場合: これから実行する `gh pr create` のコマンド
+- 作成済みの PR に追加する場合: PR 番号、ブランチ名、または PR の URL（例: `58`、`claude/assign-pr-to-me`）
 
-```bash
-gh pr view <PR番号 or ブランチ> --json assignees -q '.assignees[].login'
-```
+## 手順
 
-入っていなければ `gh pr edit --add-assignee @me` で追加し直す。追加に失敗した場合（リポジトリへの権限がないなど）は PR 自体はそのまま残し、assignee を付けられなかったことと原因をユーザーに伝える。
+1. **PR を作るときは `--assignee @me` を付ける。** `@me` は gh で認証中のアカウントに解決されるので、ユーザー名を決め打ちしなくてよい。`--draft` や `--base` など他のフラグとはそのまま併用できる。
+
+   ```bash
+   gh pr create --assignee @me --title "..." --body "..."
+   ```
+
+2. **作成済みの PR に追加するときは `gh pr edit` を使う。** 付け忘れた場合や、既存の PR が対象の場合。追加する前に今の assignee を確認し、自分以外の人がいれば停止条件に従う。
+
+   ```bash
+   gh pr view <PR番号 or ブランチ> --json assignees -q '.assignees[].login'
+   gh pr edit <PR番号 or ブランチ> --add-assignee @me
+   ```
+
+3. **自分が assignee に入ったことを確認する。** フラグの付け忘れや権限不足に、その場で気づくため。
+
+   ```bash
+   gh api user -q .login
+   gh pr view <PR番号 or ブランチ> --json assignees -q '.assignees[].login'
+   ```
+
+## 出力先
+
+- GitHub: 対象の PR の assignee に、gh で認証中のアカウントが入る
+- 会話: PR の URL と、assignee に入ったアカウント名を一行で返す（例: `https://github.com/owner/repo/pull/58（assignee: guricerin）`）。止まった場合は「停止時の報告」の形で返す
+
+## 終わりの条件
+
+`gh pr view <PR番号 or ブランチ> --json assignees -q '.assignees[].login'` の出力に、`gh api user -q .login` のアカウント名が含まれていれば完了。停止条件で止まった場合は完了ではない。
+
+## やらないこと
+
+承認があっても、このスキルの中では次のことはしない。
+
+- 自分以外のアカウントを assignee に追加する、またはすでにいる assignee を外す
+- assignee を付けられなかったことを理由に、作成した PR を閉じたり作り直したりする
