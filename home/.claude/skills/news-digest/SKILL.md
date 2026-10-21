@@ -1,5 +1,5 @@
 ---
-name: security-news-digest
+name: news-digest
 description: Auth0 の Changelog と、セキュリティニュース（JPCERT/CC・IPA・The Hacker News・BleepingComputer・Kubernetes の CVE・Azure の更新情報・GitHub Advisory）を取得し、前回の実行以降に出た記事を日本語で簡潔にまとめて、Markdown ファイルとして指定のフォルダ（指定がなければ pkb の news/output/）に出力する。「セキュリティニュースまとめて」「Auth0 の更新を確認して」「最近の脆弱性情報を集めて」「今週のセキュリティ情報」「ニュースダイジェスト作って」など、Auth0 やセキュリティ関連の新着情報を集めて読みたい場面では、フィード名や出力先を言われていなくても必ずこのスキルを使う。
 ---
 
