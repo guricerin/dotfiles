@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Claude Code の PostToolUse(Write|Edit) フック
 
-SKILL.md が書き込まれたら、雛形の未記入（{{必須: ...}}）や中身が空の見出しが残っていないかを検査する。
-残っていれば終了コード 2 で理由を返し、Claude に埋め直させる。
+SKILL.md が書き込まれたら、雛形の未記入（{{必須: ...}}）や中身が空の見出しが残っていないか、
+frontmatter の name / description が文字数の上限を超えていないかを検査する。
+問題があれば終了コード 2 で理由を返し、Claude に直させる。
 """
 
 import json
@@ -57,10 +58,54 @@ for idx, (i, level, line) in enumerate(headings):
     if not has_body:
         problems.append(f"{i} 行目: 見出しの中身が空です: {line.strip()}")
 
+
+def frontmatter_value(fm_lines, key):
+    """frontmatter から key の値を取り出す。引用符つき・折り返し（> や |）・複数行の値に対応する"""
+    for idx, line in enumerate(fm_lines):
+        m = re.match(rf"^{re.escape(key)}:\s*(.*)$", line)
+        if not m:
+            continue
+        first = m.group(1).strip()
+        rest = []
+        for next_line in fm_lines[idx + 1:]:
+            # インデントされていない行（次のキー）で値が終わる
+            if next_line and not next_line[0].isspace():
+                break
+            rest.append(next_line.strip())
+        if first[:1] in (">", "|"):
+            sep = "\n" if first[0] == "|" else " "
+            return sep.join(l for l in rest if l)
+        value = " ".join([first] + [l for l in rest if l])
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+            value = value[1:-1]
+        return value
+    return ""
+
+
+# 上限: name 64 文字・description 1024 文字は Agent Skills の仕様（https://agentskills.io/specification）。
+# description + when_to_use の 1536 文字は Claude Code のスキル一覧で切り詰められる長さ
+if lines and lines[0].strip() == "---":
+    end = next((i for i, l in enumerate(lines[1:], 1) if l.strip() == "---"), None)
+    if end is not None:
+        fm = lines[1:end]
+        name = frontmatter_value(fm, "name")
+        description = frontmatter_value(fm, "description")
+        when_to_use = frontmatter_value(fm, "when_to_use")
+        if len(name) > 64:
+            problems.append(f"name が {len(name)} 文字です。上限は 64 文字です")
+        if len(description) > 1024:
+            problems.append(f"description が {len(description)} 文字です。上限は 1024 文字です")
+        if len(description) + len(when_to_use) > 1536:
+            problems.append(
+                f"description と when_to_use の合計が {len(description) + len(when_to_use)} 文字です。"
+                "1536 文字を超えた分は Claude Code のスキル一覧で切り詰められます"
+            )
+
 if problems:
     print(
-        f"{path} に未記入の項目があります。推測で埋めず、情報が足りなければ止まってユーザーに聞いてください。"
-        "該当するものがない項目は「該当なし（理由: …）」と書いてください。\n" + "\n".join(problems),
+        f"{path} に直すべき箇所があります。未記入の項目は推測で埋めず、情報が足りなければ止まってユーザーに聞いてください。"
+        "該当するものがない項目は「該当なし（理由: …）」と書いてください。"
+        "文字数の上限を超えているものは、要点を残して短くしてください。\n" + "\n".join(problems),
         file=sys.stderr,
     )
     sys.exit(2)
