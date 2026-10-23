@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Auth0・セキュリティ関連・札幌の生活関連のフィードを取得し、期間内の記事を JSON で標準出力に出す。
+"""Auth0・セキュリティ関連・ソフトウェアの更新・札幌の生活関連のフィードを取得し、期間内の記事を JSON で標準出力に出す。
 
 使い方:
     python3 fetch_news.py --output-dir <出力先フォルダ> [--since 2026-10-14T09:00] [--days 7] [--groups sapporo]
@@ -29,7 +29,7 @@ USER_AGENT = "curl/8.7.1"
 TIMEOUT = 30
 SUMMARY_LIMIT = 600
 FILENAME_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})-(\d{2})-(\d{2})(?:-([a-z0-9_-]+))?\.md$")
-GROUPS = ["auth0", "security-ja", "security-en", "infra", "advisory", "sapporo"]
+GROUPS = ["auth0", "security-ja", "security-en", "infra", "software", "advisory", "sapporo"]
 
 # Azure の更新情報は量が多いので、本人の業務（AKS・MySQL Flexible Server・Functions・Entra ID など）に関係しそうなものだけ残す
 AZURE_KEYWORDS = [
@@ -45,6 +45,11 @@ FEEDS = [
     {"name": "BleepingComputer", "group": "security-en", "url": "https://www.bleepingcomputer.com/feed/"},
     {"name": "Kubernetes CVE", "group": "infra", "url": "https://kubernetes.io/docs/reference/issues-security/official-cve-feed/index.json"},
     {"name": "Azure Updates", "group": "infra", "url": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss", "keywords": AZURE_KEYWORDS},
+    # 窓の杜はセールや書籍の紹介も多いので、その連載の記事は題名で除く
+    {
+        "name": "窓の杜", "group": "software", "url": "https://forest.watch.impress.co.jp/data/rss/1.0/wf/feed.rdf",
+        "exclude_titles": ["【本日みつけたお買い得情報】", "【Book Watch/セール情報】", "【読み放題！TechLib新着情報】"],
+    },
     # 以下は本人が住む札幌の生活に関係するもの
     {"name": "札幌市 新着情報", "group": "sapporo", "url": "https://www.city.sapporo.jp/new/shinchaku.xml"},
     {"name": "札幌市 報道発表", "group": "sapporo", "url": "https://www.city.sapporo.jp/somu/koho/hodo/houdou.xml"},
