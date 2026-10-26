@@ -29,7 +29,7 @@ USER_AGENT = "curl/8.7.1"
 TIMEOUT = 30
 SUMMARY_LIMIT = 600
 FILENAME_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})-(\d{2})-(\d{2})(?:-([a-z0-9_-]+))?\.md$")
-GROUPS = ["auth0", "security-ja", "security-en", "infra", "software", "advisory", "sapporo"]
+GROUPS = ["auth0", "security-ja", "security-en", "infra", "software", "ai", "advisory", "sapporo"]
 
 # Azure の更新情報は量が多いので、本人の業務（AKS・MySQL Flexible Server・Functions・Entra ID など）に関係しそうなものだけ残す
 AZURE_KEYWORDS = [
@@ -50,6 +50,10 @@ FEEDS = [
         "name": "窓の杜", "group": "software", "url": "https://forest.watch.impress.co.jp/data/rss/1.0/wf/feed.rdf",
         "exclude_titles": ["【本日みつけたお買い得情報】", "【Book Watch/セール情報】", "【読み放題！TechLib新着情報】"],
     },
+    {"name": "ITmedia AI+", "group": "ai", "url": "https://rss.itmedia.co.jp/rss/2.0/aiplus.xml"},
+    {"name": "Claude Code Releases", "group": "ai", "url": "https://github.com/anthropics/claude-code/releases.atom"},
+    {"name": "OpenAI News", "group": "ai", "url": "https://openai.com/news/rss.xml"},
+    {"name": "Simon Willison's Weblog", "group": "ai", "url": "https://simonwillison.net/atom/everything/"},
     # 以下は本人が住む札幌の生活に関係するもの
     {"name": "札幌市 新着情報", "group": "sapporo", "url": "https://www.city.sapporo.jp/new/shinchaku.xml"},
     {"name": "札幌市 報道発表", "group": "sapporo", "url": "https://www.city.sapporo.jp/somu/koho/hodo/houdou.xml"},
