@@ -45,17 +45,28 @@ FEEDS = [
     {"name": "BleepingComputer", "group": "security-en", "url": "https://www.bleepingcomputer.com/feed/"},
     {"name": "Kubernetes CVE", "group": "infra", "url": "https://kubernetes.io/docs/reference/issues-security/official-cve-feed/index.json"},
     {"name": "Azure Updates", "group": "infra", "url": "https://www.microsoft.com/releasecommunications/api/v2/azure/rss", "keywords": AZURE_KEYWORDS},
-    # 窓の杜はセールや書籍の紹介も多いので、その連載の記事は題名で除く
+    # 窓の杜はセール・書籍・PC の売れ筋ランキング・Excel の講座も多いので、その連載の記事は題名で除く
     {
         "name": "窓の杜", "group": "software", "url": "https://forest.watch.impress.co.jp/data/rss/1.0/wf/feed.rdf",
-        "exclude_titles": ["【本日みつけたお買い得情報】", "【Book Watch/セール情報】", "【読み放題！TechLib新着情報】"],
+        "exclude_titles": [
+            "【本日みつけたお買い得情報】", "【Book Watch/セール情報】", "【読み放題！TechLib新着情報】",
+            "売れ筋PCランキング", "【いまさら聞けないExcelの使い方講座】",
+        ],
     },
     {"name": "ITmedia AI+", "group": "ai", "url": "https://rss.itmedia.co.jp/rss/2.0/aiplus.xml"},
     {"name": "Claude Code Releases", "group": "ai", "url": "https://github.com/anthropics/claude-code/releases.atom"},
-    {"name": "OpenAI News", "group": "ai", "url": "https://openai.com/news/rss.xml"},
+    # OpenAI は企業の導入事例が多い。事例はカテゴリーがないか Startup なので除く
+    {
+        "name": "OpenAI News", "group": "ai", "url": "https://openai.com/news/rss.xml",
+        "exclude_categories": ["Startup"], "exclude_uncategorized": True,
+    },
     {"name": "Simon Willison's Weblog", "group": "ai", "url": "https://simonwillison.net/atom/everything/"},
     # 以下は本人が住む札幌の生活に関係するもの
-    {"name": "札幌市 新着情報", "group": "sapporo", "url": "https://www.city.sapporo.jp/new/shinchaku.xml"},
+    # 札幌市の新着情報は入札・契約・職員採用・事業者向けの告知が多いので、題名で除く
+    {
+        "name": "札幌市 新着情報", "group": "sapporo", "url": "https://www.city.sapporo.jp/new/shinchaku.xml",
+        "exclude_titles": ["入札", "契約", "採用", "合格者", "事業者", "事業承継", "企業情報"],
+    },
     {"name": "札幌市 報道発表", "group": "sapporo", "url": "https://www.city.sapporo.jp/somu/koho/hodo/houdou.xml"},
     {"name": "北海道新聞", "group": "sapporo", "url": "https://www.hokkaido-np.co.jp/output/7/free/index.ad.xml", "keywords": ["札幌"], "match_summary": True},
     {"name": "札幌経済新聞", "group": "sapporo", "url": "https://sapporo.keizai.biz/rss.xml"},
@@ -226,6 +237,10 @@ def main():
             if not it["published"] or it["published"] < since:
                 continue
             if any(x in (it["title"] or "") for x in feed.get("exclude_titles", [])):
+                continue
+            if feed.get("exclude_uncategorized") and not it["categories"]:
+                continue
+            if any(c in it["categories"] for c in feed.get("exclude_categories", [])):
                 continue
             keywords = feed.get("keywords")
             if keywords:
