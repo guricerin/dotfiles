@@ -9,7 +9,7 @@
 - --groups を付けると、そのグループのソースだけを取得する。出力ファイル名は YYYY-MM-DD-HH-MM-<グループ>.md になり、
   全部を取得する実行の「前回」としては数えない（一部だけのまとめを起点にすると、他のグループの記事が抜けるため）
 - 取得に失敗したソースがあっても止まらず、sources[].error に理由を入れて残りを続ける
-- 外部ライブラリは使わない（標準ライブラリと gh コマンドだけ）
+- 外部ライブラリは使わない（標準ライブラリだけ）
 """
 
 import argparse
@@ -17,7 +17,6 @@ import html
 import json
 import os
 import re
-import subprocess
 import sys
 import urllib.parse
 import urllib.request
@@ -30,7 +29,7 @@ USER_AGENT = "curl/8.7.1"
 TIMEOUT = 30
 SUMMARY_LIMIT = 600
 FILENAME_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})-(\d{2})-(\d{2})(?:-([a-z0-9_-]+))?\.md$")
-GROUPS = ["auth0", "security-ja", "security-en", "infra", "software", "ai", "advisory", "sapporo"]
+GROUPS = ["auth0", "security-ja", "security-en", "infra", "software", "ai", "sapporo"]
 
 # Azure の更新情報は量が多いので、本人の業務（AKS・MySQL Flexible Server・Functions・Entra ID など）に関係しそうなものだけ残す
 AZURE_KEYWORDS = [
@@ -71,10 +70,6 @@ FEEDS = [
     {"name": "Google ニュース（交通・ライフライン）", "group": "sapporo", "url": "https://news.google.com/rss/search?q=" + urllib.parse.quote("札幌 (運休 OR 運転見合わせ OR 通行止め OR 除雪 OR 停電 OR 断水)") + "&hl=ja&gl=JP&ceid=JP:ja"},
     {"name": "Google ニュース（注意喚起）", "group": "sapporo", "url": "https://news.google.com/rss/search?q=" + urllib.parse.quote("札幌 (逃走 OR 不審者 OR 発砲 OR 刃物 OR 注意喚起)") + "&hl=ja&gl=JP&ceid=JP:ja"},
 ]
-
-# GitHub Advisory は本人が使う言語のエコシステムに絞り、件数が多いので high 以上だけにする
-ADVISORY_ECOSYSTEMS = ["npm", "composer", "go", "rust"]
-ADVISORY_SEVERITIES = ["critical", "high"]
 
 NS = {
     "rss1": "http://purl.org/rss/1.0/",
@@ -161,27 +156,6 @@ def parse_json_feed(data):
     return items
 
 
-def fetch_advisories(since):
-    items = []
-    for eco in ADVISORY_ECOSYSTEMS:
-        for sev in ADVISORY_SEVERITIES:
-            path = f"/advisories?ecosystem={eco}&severity={sev}&published=>={since.date().isoformat()}&per_page=100"
-            out = subprocess.run(["gh", "api", path], capture_output=True, text=True, timeout=TIMEOUT)
-            if out.returncode != 0:
-                raise RuntimeError(out.stderr.strip() or f"gh api が終了コード {out.returncode} で失敗")
-            for adv in json.loads(out.stdout):
-                packages = sorted({v["package"]["name"] for v in adv.get("vulnerabilities") or [] if v.get("package")})
-                items.append({
-                    "title": f"[{sev}] {adv.get('summary')}",
-                    "link": adv.get("html_url"),
-                    "published": parse_date(adv.get("published_at")),
-                    "summary": adv.get("description"),
-                    "categories": [eco] + packages,
-                    "cve": adv.get("cve_id"),
-                })
-    return items
-
-
 def find_previous(output_dir, suffix):
     """出力先にある最新のまとめを探す。全部のまとめ（接尾辞なし）と、同じ接尾辞のまとめだけを数える。
     ファイル名の時刻はローカル時刻として読む"""
@@ -260,17 +234,6 @@ def main():
                     continue
             items.append({"source": feed["name"], "group": feed["group"], **it})
             entry["count"] += 1
-        sources.append(entry)
-
-    if not groups or "advisory" in groups:
-        entry = {"name": "GitHub Advisory", "group": "advisory", "url": "gh api /advisories", "error": None, "count": 0}
-        try:
-            for it in fetch_advisories(since):
-                if it["published"] and it["published"] >= since:
-                    items.append({"source": "GitHub Advisory", "group": "advisory", **it})
-                    entry["count"] += 1
-        except Exception as e:
-            entry["error"] = f"{type(e).__name__}: {e}"
         sources.append(entry)
 
     # 同じ URL が複数のフィードに出ることがあるので除く
