@@ -2,9 +2,10 @@
 """Auth0・セキュリティ関連・ソフトウェアの更新・札幌の生活関連のフィードを取得し、期間内の記事を JSON で標準出力に出す。
 
 使い方:
-    python3 fetch_news.py --output-dir <出力先フォルダ> [--since 2026-10-14T09:00] [--days 7] [--groups sapporo]
+    python3 fetch_news.py --output-dir <出力先フォルダ> [--since 2026-10-14T09:00] [--days 3] [--groups sapporo]
 
 - 期間の始まり（since）は、--since 指定 > 出力先にある最新の YYYY-MM-DD-HH-MM.md の時刻 > 現在から --days 日前、の順で決める
+  前回の出力が --days 日より前なら、現在から --days 日前に縮める（記事が多すぎると、まとめるのに時間がかかるため）
 - --groups を付けると、そのグループのソースだけを取得する。出力ファイル名は YYYY-MM-DD-HH-MM-<グループ>.md になり、
   全部を取得する実行の「前回」としては数えない（一部だけのまとめを起点にすると、他のグループの記事が抜けるため）
 - 取得に失敗したソースがあっても止まらず、sources[].error に理由を入れて残りを続ける
@@ -201,7 +202,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--output-dir", required=True)
     ap.add_argument("--since", help="ISO 8601。タイムゾーンなしはローカル時刻")
-    ap.add_argument("--days", type=int, default=7, help="前回の出力がないときに遡る日数")
+    ap.add_argument("--days", type=int, default=3, help="--since を指定しないときに遡る最大の日数")
     ap.add_argument("--groups", help=f"取得するグループをカンマ区切りで指定する（{', '.join(GROUPS)}）。省略時は全部")
     args = ap.parse_args()
     groups = sorted(set(args.groups.split(","))) if args.groups else None
@@ -216,10 +217,15 @@ def main():
         since = datetime.fromisoformat(args.since)
         since = since.astimezone() if since.tzinfo is None else since
         since_source = "arg"
-    elif previous_time:
+    elif previous_time and previous_time >= now - timedelta(days=args.days):
         since, since_source = previous_time, "previous_file"
     else:
         since, since_source = now - timedelta(days=args.days), f"default_{args.days}d"
+        if previous_time:
+            warnings.append(
+                f"前回の出力 {previous_file} が {args.days} 日より前なので、期間を直近 {args.days} 日に縮めた。"
+                "それより前の記事は取得していない"
+            )
     if since > now:
         warnings.append(f"期間の始まり {since.isoformat()} が現在時刻より未来です")
 
