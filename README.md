@@ -55,16 +55,16 @@ GIT_SSH_COMMAND='ssh -i ~/.ssh/keys/github/id_ed25519' git clone git@github.com:
 
 ```sh
 ./path/to/dotfiles/scripts/depends.sh
-./path/to/dotfiles/scripts/mise-tools.sh
+mise install
 ```
 
-`depends.sh` で brew のツールと mise を入れてから、`mise-tools.sh` で mise のツールを入れる。
+`depends.sh` で brew のツールと mise を入れてから、`mise install` で [~/.config/mise/config.toml](./home/.config/mise/config.toml) に書いたツールを入れる。`mise use --global` でツールを足すと、リンク先のこのリポジトリのファイルが書き換わるので、コミットする。
 
 ### ツールの入れ分け
 
 | 入れる先 | 入れるもの | 例 |
 |---|---|---|
-| mise（`scripts/mise-tools.sh`） | 言語のランタイムや、プロジェクトごとにバージョンを固定したいツール | bun, python, go, terraform, kubectl |
+| mise（`~/.config/mise/config.toml`） | 言語のランタイムや、プロジェクトごとにバージョンを固定したいツール | bun, python, ruby, go, terraform, kubectl |
 | brew（`scripts/depends.sh`） | どのプロジェクトでも同じものを使い、最新版で困らない CLI ツール。シェルや mise 本体も含む | zsh, gh, ripgrep, fzf, mise |
 | 公式のインストーラ | 公式のバージョン管理ツールがあるもの | Rust（rustup） |
 
