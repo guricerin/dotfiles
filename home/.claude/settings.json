@@ -1,4 +1,46 @@
 {
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/assign-pr-to-me.sh",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/check-skill-md.py",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "sensyn-example@sensyn-robotics": true,
+    "sensyn-draft-pr-guard@sensyn-robotics": true,
+    "sensyn-grafana@sensyn-robotics": true,
+    "sensyn-redash-query@sensyn-robotics": true,
+    "sensyn-vuln-check@sensyn-robotics": true
+  },
+  "extraKnownMarketplaces": {
+    "sensyn-robotics": {
+      "source": {
+        "source": "github",
+        "repo": "sensyn-robotics/claude-plugins-marketplace"
+      }
+    }
+  },
+  "language": "japanese",
+  "effortLevel": "high",
   "tui": "fullscreen",
-  "language": "japanese"
+  "showThinkingSummaries": true,
+  "theme": "dark-daltonized"
 }
