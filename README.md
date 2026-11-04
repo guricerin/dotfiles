@@ -38,13 +38,13 @@ GIT_SSH_COMMAND='ssh -i ~/.ssh/keys/github/id_ed25519' git clone git@github.com:
 ### dry-run
 
 ```sh
-./path/to/dotfiles/setup.sh
+./path/to/dotfiles/setup.sh --dry-run
 ```
 
 ### apply
 
 ```sh
-./path/to/dotfiles/setup.sh --apply
+./path/to/dotfiles/setup.sh
 ```
 
 ## After Setup

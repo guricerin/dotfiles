@@ -38,13 +38,13 @@ print_expectation() {
   done
 }
 
-declare -g IS_APPLY_MODE=0
+declare -g IS_DRY_RUN=0
 
 parse_args() {
   for arg in "$@"; do
     case $arg in
-      -a|--apply)
-        IS_APPLY_MODE=1
+      -n|--dry-run)
+        IS_DRY_RUN=1
         ;;
       *)
         ;;
@@ -54,14 +54,14 @@ parse_args() {
 
 main() {
   parse_args "$@"
-  if [ $IS_APPLY_MODE -eq 1 ]; then
+  if [ $IS_DRY_RUN -eq 1 ]; then
+    echo -e "dry-run\n"
+    print_expectation
+  else
     echo "$LOGO"
     echo -e "apply\n"
     build_symlinks
     echo -e "\n ようこそ、$(whoami) の世界へ。\n そして、あなたの帰還に感謝します。"
-  else
-    echo -e "dry-run\n"
-    print_expectation
   fi
 }
 
