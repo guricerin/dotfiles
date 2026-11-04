@@ -55,6 +55,26 @@ GIT_SSH_COMMAND='ssh -i ~/.ssh/keys/github/id_ed25519' git clone git@github.com:
 
 ```sh
 ./path/to/dotfiles/scripts/depends.sh
+./path/to/dotfiles/scripts/mise-tools.sh
+```
+
+`depends.sh` で brew のツールと mise を入れてから、`mise-tools.sh` で mise のツールを入れる。
+
+### ツールの入れ分け
+
+| 入れる先 | 入れるもの | 例 |
+|---|---|---|
+| mise（`scripts/mise-tools.sh`） | 言語のランタイムや、プロジェクトごとにバージョンを固定したいツール | bun, python, go, terraform, kubectl |
+| brew（`scripts/depends.sh`） | どのプロジェクトでも同じものを使い、最新版で困らない CLI ツール。シェルや mise 本体も含む | zsh, gh, ripgrep, fzf, mise |
+| 公式のインストーラ | 公式のバージョン管理ツールがあるもの | Rust（rustup） |
+
+- mise はリポジトリの `mise.toml` でバージョンを切り替えられる。brew はまとめて `brew upgrade` できる
+- 同じツールを mise と brew の両方に入れない。PATH の順番で動くほうが変わり、バージョンの食い違いに気づきにくい（brew が依存関係として入れる python などは除く）
+- 迷ったら brew に入れ、バージョンで困ったら mise に移す
+- Rust は [rustup](https://rustup.rs/) で入れる。プロジェクトごとのバージョンは `rust-toolchain.toml` で固定できる
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
 ### Set zsh as default shell
