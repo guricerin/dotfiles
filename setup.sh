@@ -31,6 +31,23 @@ build_symlinks() {
   done
 }
 
+confirm_apply() {
+  if [ $IS_AUTO_APPROVE -eq 1 ]; then
+    return 0
+  fi
+  local answer
+  read -r -p "続けますか？ [y/N] " answer || answer=""
+  case $answer in
+    y|Y|yes|YES)
+      return 0
+      ;;
+    *)
+      echo "中止しました"
+      exit 1
+      ;;
+  esac
+}
+
 print_expectation() {
   for src in $(find $DOTFILES_HOME -type f); do
     local dst=${src/$DOTFILES_HOME/$(echo $HOME)}
@@ -38,13 +55,17 @@ print_expectation() {
   done
 }
 
-declare -g IS_APPLY_MODE=0
+declare -g IS_DRY_RUN=0
+declare -g IS_AUTO_APPROVE=0
 
 parse_args() {
   for arg in "$@"; do
     case $arg in
-      -a|--apply)
-        IS_APPLY_MODE=1
+      -n|--dry-run)
+        IS_DRY_RUN=1
+        ;;
+      -y|--yes)
+        IS_AUTO_APPROVE=1
         ;;
       *)
         ;;
@@ -54,14 +75,17 @@ parse_args() {
 
 main() {
   parse_args "$@"
-  if [ $IS_APPLY_MODE -eq 1 ]; then
+  if [ $IS_DRY_RUN -eq 1 ]; then
+    echo -e "dry-run\n"
+    print_expectation
+  else
+    print_expectation
+    echo
+    confirm_apply
     echo "$LOGO"
     echo -e "apply\n"
     build_symlinks
     echo -e "\n ようこそ、$(whoami) の世界へ。\n そして、あなたの帰還に感謝します。"
-  else
-    echo -e "dry-run\n"
-    print_expectation
   fi
 }
 
