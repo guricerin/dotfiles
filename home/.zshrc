@@ -71,7 +71,7 @@ function ghq-fzf-cd() {
 zle -N ghq-fzf-cd
 bindkey '^G' ghq-fzf-cd
 
-# kubectl
+# kubectl (via mise)
 if command -v kubectl >/dev/null 2>&1; then
   source <(kubectl completion zsh)
 fi
@@ -83,21 +83,19 @@ if command -v helm >/dev/null 2>&1; then
   source <(helm completion zsh)
 fi
 
-# Go (via brew)
+# Go (via mise)
 if command -v go >/dev/null 2>&1; then
   export GOPATH="$(go env GOPATH)"
+  ## go install で入れたコマンド
+  export PATH="$GOPATH/bin:$PATH"
 fi
 
 # Rust (via rustup)
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# bun
-if [ -d "$HOME/.bun" ]; then
-  export BUN_INSTALL="$HOME/.bun"
-  export PATH="$BUN_INSTALL/bin:$PATH"
-  ## bun completions
-  [ -f "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
-fi
+# bun (via mise)
+## bun add -g で入れたコマンド
+export PATH="$HOME/.bun/bin:$PATH"
 
 # alias
 alias l='ls -alF --color=auto'
