@@ -20,7 +20,7 @@ description: 全プロジェクトの Claude Code の会話履歴（~/.claude/pr
   - 提案を実際にファイルへ反映すること。このスキルでは提案までで止め、反映は本人が選んだものだけを別の作業として行う
   - 履歴の中身（仕事のリポジトリの内容を含む）を、会話以外の場所（外部のサービス、pkb などのファイル）に出すこと
 - **想定外**:
-  - `extract_history.py` がエラーで終わった、または出力が JSON として読めない
+  - `extract_history.ts` がエラーで終わった、または出力が JSON として読めない
   - `~/.claude/projects` がない、または期間内の会話が 0 件
 
 ### 停止時の報告
@@ -50,7 +50,7 @@ description: 全プロジェクトの Claude Code の会話履歴（~/.claude/pr
 1. **履歴を抜き出す。** 生の履歴は大きく、ツールの出力も混ざっていて読みにくいため、スクリプトで本人の発言・拒否・エラー・中断・呼ばれたスキルだけにする。期間を指定されたときだけ `--since` を付ける。
 
    ```bash
-   python3 ~/.claude/skills/harness-review/scripts/extract_history.py [--since 2026-10-20T00:00]
+   bun ~/.claude/skills/harness-review/scripts/extract_history.ts [--since 2026-10-20T00:00]
    ```
 
    出力の `until` は手順 6 で使うので控えておく。
@@ -76,7 +76,7 @@ description: 全プロジェクトの Claude Code の会話履歴（~/.claude/pr
 6. **前回の実行時刻を保存する。** 次回の「前回から」の起点にするため。手順 5 まで終わったときだけ、手順 1 の `until` を保存する。停止条件で止まったときは保存しない（見ていない期間が抜けるため）。`--since` で過去の一部だけを見たときも保存しない。
 
    ```bash
-   python3 ~/.claude/skills/harness-review/scripts/extract_history.py --mark-done <手順 1 の until>
+   bun ~/.claude/skills/harness-review/scripts/extract_history.ts --mark-done <手順 1 の until>
    ```
 
 ## 出力先
