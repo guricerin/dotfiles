@@ -47,6 +47,8 @@ GIT_SSH_COMMAND='ssh -i ~/.ssh/keys/github/id_ed25519' git clone git@github.com:
 ./path/to/dotfiles/setup.sh
 ```
 
+張るリンクを表示したあと、続けるかを聞く。聞かずに apply するときは `--yes`（`-y`）を付ける。
+
 ## After Setup
 
 ### Install tools

@@ -31,6 +31,23 @@ build_symlinks() {
   done
 }
 
+confirm_apply() {
+  if [ $IS_AUTO_APPROVE -eq 1 ]; then
+    return 0
+  fi
+  local answer
+  read -r -p "続けますか？ [y/N] " answer || answer=""
+  case $answer in
+    y|Y|yes|YES)
+      return 0
+      ;;
+    *)
+      echo "中止しました"
+      exit 1
+      ;;
+  esac
+}
+
 print_expectation() {
   for src in $(find $DOTFILES_HOME -type f); do
     local dst=${src/$DOTFILES_HOME/$(echo $HOME)}
@@ -39,12 +56,16 @@ print_expectation() {
 }
 
 declare -g IS_DRY_RUN=0
+declare -g IS_AUTO_APPROVE=0
 
 parse_args() {
   for arg in "$@"; do
     case $arg in
       -n|--dry-run)
         IS_DRY_RUN=1
+        ;;
+      -y|--yes)
+        IS_AUTO_APPROVE=1
         ;;
       *)
         ;;
@@ -58,6 +79,9 @@ main() {
     echo -e "dry-run\n"
     print_expectation
   else
+    print_expectation
+    echo
+    confirm_apply
     echo "$LOGO"
     echo -e "apply\n"
     build_symlinks
