@@ -1,0 +1,9 @@
+# mise で入れるツール。入れ分けの基準は README.md の「ツールの入れ分け」を参照
+# プロジェクトで別のバージョンが要るときは、そのリポジトリで `mise use <tool>@<version>` する
+[tools]
+bun = "latest"
+go = "latest"
+kubectl = "latest"
+python = "latest"
+ruby = "3.2.9"
+terraform = "latest"
