@@ -3,6 +3,7 @@
 [tools]
 bun = "latest"
 go = "latest"
+helm = "4.2.4"
 kubectl = "latest"
 python = "latest"
 ruby = "3.2.9"
