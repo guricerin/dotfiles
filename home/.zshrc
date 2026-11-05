@@ -121,6 +121,14 @@ abbr -S dc='docker compose' >> /dev/null
 abbr -S k='kubectl' >> /dev/null
 abbr -S tf='terraform' >> /dev/null
 
+# カレントディレクトリを OSC 7 で端末に知らせる
+## WezTerm のタブ名に使う。WSL では WezTerm から zsh のカレントディレクトリが見えないため
+_osc7_cwd() {
+  printf '\e]7;file://%s%s\e\\' "$HOST" "${PWD// /%20}"
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _osc7_cwd
+
 # starship: プロンプト改造
 ## https://starship.rs/
 ## ↓は最終行に書くこと
