@@ -20,12 +20,20 @@ import { dirname, join } from "node:path";
 const PROJECTS_DIR = join(homedir(), ".claude/projects");
 const STATE_FILE = join(homedir(), ".claude/state/harness-review/last-run.json");
 const TEXT_LIMIT = 400;
-const ERROR_LIMIT = 200;
+const ERROR_HEAD = 80;
+const ERROR_TAIL = 200;
 // 履歴に残るが本人の発言ではないもの
 const NOISE_RE = /^<(local-command-caveat|local-command-stdout|system-reminder|task-notification)>/;
 const COMMAND_RE = /<command-name>(\/[^<]+)<\/command-name>(?:[\s\S]*?<command-args>([\s\S]*?)<\/command-args>)?/;
 
-type Entry = { time: string; tool?: string; input: string; reason?: string | null; error?: string };
+type Entry = {
+  time: string;
+  tool?: string;
+  input: string;
+  by?: "user" | "classifier";
+  reason?: string | null;
+  error?: string;
+};
 type Session = {
   file: string;
   cwd: string | null;
@@ -62,6 +70,12 @@ function localIso(t: Date): string {
 function clip(s: string, n: number): string {
   s = s.trim();
   return s.length <= n ? s : `${s.slice(0, n)}…`;
+}
+
+// コマンドのエラーは、先頭に普通の出力が続き、本当のエラーは末尾に出ることが多いため、両端を残す
+function clipEnds(s: string, head: number, tail: number): string {
+  s = s.trim();
+  return s.length <= head + tail ? s : `${s.slice(0, head)}…${s.slice(-tail)}`;
 }
 
 function textOf(content: unknown): string {
@@ -123,10 +137,17 @@ function readSession(path: string, since: Date, until: Date): Session {
       if (result.includes("doesn't want to proceed")) {
         // 拒否の理由を本人が書いていれば、結果の後ろに付いてくる
         const m = result.match(/the user said:\s*([\s\S]*)/);
+        entry.by = "user";
+        entry.reason = m ? clip(m[1], TEXT_LIMIT) : null;
+        session.rejected.push(entry);
+      } else if (result.includes("auto mode classifier")) {
+        // auto mode の拒否はエラーと同じ形で返るが、本人の拒否と同じく「やらせたくない操作」の手がかりになる
+        const m = result.match(/Reason:\s*(.*?)(?:\. If you have|$)/m);
+        entry.by = "classifier";
         entry.reason = m ? clip(m[1], TEXT_LIMIT) : null;
         session.rejected.push(entry);
       } else {
-        entry.error = clip(result, ERROR_LIMIT);
+        entry.error = clipEnds(result, ERROR_HEAD, ERROR_TAIL);
         session.errors.push(entry);
       }
     }
@@ -146,6 +167,15 @@ function readSession(path: string, since: Date, until: Date): Session {
     session.prompts.push({ time: ts, text: clip(text, TEXT_LIMIT) });
   }
   return session;
+}
+
+// グローバルとプロジェクトのスキル名。/clear などの組み込みのコマンドと区別するために使う
+function installedSkills(cwd: string | null): string[] {
+  const dirs = [join(homedir(), ".claude/skills")];
+  if (cwd) dirs.push(join(cwd, ".claude/skills"));
+  return dirs.flatMap((dir) =>
+    existsSync(dir) ? readdirSync(dir).filter((name) => existsSync(join(dir, name, "SKILL.md"))) : []
+  );
 }
 
 function main() {
@@ -178,8 +208,23 @@ function main() {
   }
   sessions.sort((a, b) => a.first!.localeCompare(b.first!));
 
-  const skills: Record<string, number> = {};
-  for (const s of sessions) for (const name of s.skills) skills[name] = (skills[name] ?? 0) + 1;
+  // 本人がスラッシュコマンドで呼んだスキルは Skill ツールを通らないため、commands からも数える。
+  // 分けて数えるのは、Claude が自分で呼んだ回数から description が効いているかを見るため
+  const skillNames = new Set(sessions.flatMap((s) => s.skills));
+  for (const s of sessions) for (const name of installedSkills(s.cwd)) skillNames.add(name);
+  const skills: Record<string, { user: number; claude: number }> = {};
+  const count = (name: string, by: "user" | "claude") => {
+    skills[name] ??= { user: 0, claude: 0 };
+    skills[name][by]++;
+  };
+  for (const s of sessions) {
+    for (const name of s.skills) count(name, "claude");
+    for (const command of s.commands) {
+      const name = command.split(" ")[0].slice(1);
+      // プラグインのスキルは「プラグイン名:スキル名」の形
+      if (skillNames.has(name) || name.includes(":")) count(name, "user");
+    }
+  }
   const sum = (f: (s: Session) => number) => sessions.reduce((n, s) => n + f(s), 0);
   console.log(JSON.stringify({
     since: localIso(since),
