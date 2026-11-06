@@ -169,6 +169,15 @@ function readSession(path: string, since: Date, until: Date): Session {
   return session;
 }
 
+// グローバルとプロジェクトのスキル名。/clear などの組み込みのコマンドと区別するために使う
+function installedSkills(cwd: string | null): string[] {
+  const dirs = [join(homedir(), ".claude/skills")];
+  if (cwd) dirs.push(join(cwd, ".claude/skills"));
+  return dirs.flatMap((dir) =>
+    existsSync(dir) ? readdirSync(dir).filter((name) => existsSync(join(dir, name, "SKILL.md"))) : []
+  );
+}
+
 function main() {
   const markDone = arg("mark-done");
   if (markDone) {
@@ -199,8 +208,23 @@ function main() {
   }
   sessions.sort((a, b) => a.first!.localeCompare(b.first!));
 
-  const skills: Record<string, number> = {};
-  for (const s of sessions) for (const name of s.skills) skills[name] = (skills[name] ?? 0) + 1;
+  // 本人がスラッシュコマンドで呼んだスキルは Skill ツールを通らないため、commands からも数える。
+  // 分けて数えるのは、Claude が自分で呼んだ回数から description が効いているかを見るため
+  const skillNames = new Set(sessions.flatMap((s) => s.skills));
+  for (const s of sessions) for (const name of installedSkills(s.cwd)) skillNames.add(name);
+  const skills: Record<string, { user: number; claude: number }> = {};
+  const count = (name: string, by: "user" | "claude") => {
+    skills[name] ??= { user: 0, claude: 0 };
+    skills[name][by]++;
+  };
+  for (const s of sessions) {
+    for (const name of s.skills) count(name, "claude");
+    for (const command of s.commands) {
+      const name = command.split(" ")[0].slice(1);
+      // プラグインのスキルは「プラグイン名:スキル名」の形
+      if (skillNames.has(name) || name.includes(":")) count(name, "user");
+    }
+  }
   const sum = (f: (s: Session) => number) => sessions.reduce((n, s) => n + f(s), 0);
   console.log(JSON.stringify({
     since: localIso(since),
