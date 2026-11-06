@@ -20,7 +20,8 @@ import { dirname, join } from "node:path";
 const PROJECTS_DIR = join(homedir(), ".claude/projects");
 const STATE_FILE = join(homedir(), ".claude/state/harness-review/last-run.json");
 const TEXT_LIMIT = 400;
-const ERROR_LIMIT = 200;
+const ERROR_HEAD = 80;
+const ERROR_TAIL = 200;
 // 履歴に残るが本人の発言ではないもの
 const NOISE_RE = /^<(local-command-caveat|local-command-stdout|system-reminder|task-notification)>/;
 const COMMAND_RE = /<command-name>(\/[^<]+)<\/command-name>(?:[\s\S]*?<command-args>([\s\S]*?)<\/command-args>)?/;
@@ -69,6 +70,12 @@ function localIso(t: Date): string {
 function clip(s: string, n: number): string {
   s = s.trim();
   return s.length <= n ? s : `${s.slice(0, n)}…`;
+}
+
+// コマンドのエラーは、先頭に普通の出力が続き、本当のエラーは末尾に出ることが多いため、両端を残す
+function clipEnds(s: string, head: number, tail: number): string {
+  s = s.trim();
+  return s.length <= head + tail ? s : `${s.slice(0, head)}…${s.slice(-tail)}`;
 }
 
 function textOf(content: unknown): string {
@@ -140,7 +147,7 @@ function readSession(path: string, since: Date, until: Date): Session {
         entry.reason = m ? clip(m[1], TEXT_LIMIT) : null;
         session.rejected.push(entry);
       } else {
-        entry.error = clip(result, ERROR_LIMIT);
+        entry.error = clipEnds(result, ERROR_HEAD, ERROR_TAIL);
         session.errors.push(entry);
       }
     }
