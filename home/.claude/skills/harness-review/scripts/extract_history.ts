@@ -25,7 +25,14 @@ const ERROR_LIMIT = 200;
 const NOISE_RE = /^<(local-command-caveat|local-command-stdout|system-reminder|task-notification)>/;
 const COMMAND_RE = /<command-name>(\/[^<]+)<\/command-name>(?:[\s\S]*?<command-args>([\s\S]*?)<\/command-args>)?/;
 
-type Entry = { time: string; tool?: string; input: string; reason?: string | null; error?: string };
+type Entry = {
+  time: string;
+  tool?: string;
+  input: string;
+  by?: "user" | "classifier";
+  reason?: string | null;
+  error?: string;
+};
 type Session = {
   file: string;
   cwd: string | null;
@@ -123,6 +130,13 @@ function readSession(path: string, since: Date, until: Date): Session {
       if (result.includes("doesn't want to proceed")) {
         // 拒否の理由を本人が書いていれば、結果の後ろに付いてくる
         const m = result.match(/the user said:\s*([\s\S]*)/);
+        entry.by = "user";
+        entry.reason = m ? clip(m[1], TEXT_LIMIT) : null;
+        session.rejected.push(entry);
+      } else if (result.includes("auto mode classifier")) {
+        // auto mode の拒否はエラーと同じ形で返るが、本人の拒否と同じく「やらせたくない操作」の手がかりになる
+        const m = result.match(/Reason:\s*(.*?)(?:\. If you have|$)/m);
+        entry.by = "classifier";
         entry.reason = m ? clip(m[1], TEXT_LIMIT) : null;
         session.rejected.push(entry);
       } else {
