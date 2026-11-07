@@ -58,7 +58,7 @@ GIT_SSH_COMMAND='ssh -i ~/.ssh/keys/github/id_ed25519' git clone git@github.com:
 mise install
 ```
 
-`depends.sh` で brew のツールと mise を入れてから、`mise install` で [~/.config/mise/config.toml](./home/.config/mise/config.toml) に書いたツールを入れる。`mise use --global` でツールを足すと、リンク先のこのリポジトリのファイルが書き換わるので、コミットする。
+`depends.sh` で brew のツールと mise、uv tool のツールを入れてから、`mise install` で [~/.config/mise/config.toml](./home/.config/mise/config.toml) に書いたツールを入れる。`mise use --global` でツールを足すと、リンク先のこのリポジトリのファイルが書き換わるので、コミットする。
 
 ### ツールの入れ分け
 
@@ -66,6 +66,7 @@ mise install
 |---|---|---|
 | mise（`~/.config/mise/config.toml`） | 言語のランタイムや、プロジェクトごとにバージョンを固定したいツール | bun, python, ruby, go, terraform, kubectl |
 | brew（`scripts/depends.sh`） | どのプロジェクトでも同じものを使い、最新版で困らない CLI ツール。シェルや mise 本体も含む | zsh, gh, ripgrep, fzf, mise |
+| uv tool（`scripts/depends.sh`） | brew にない Python 製の CLI ツール。`~/.local/bin` に入る | skillspector |
 | 公式のインストーラ | 公式のバージョン管理ツールがあるもの | Rust（rustup） |
 
 - mise はリポジトリの `mise.toml` でバージョンを切り替えられる。brew はまとめて `brew upgrade` できる

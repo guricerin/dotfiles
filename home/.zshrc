@@ -41,6 +41,8 @@ fi
 # my-bin
 export PATH="$HOME/bin:$PATH"
 
+export PATH="$HOME/.local/bin:$PATH"
+
 # sheldon (via brew): shell用プラグインマネージャー
 ## https://github.com/rossmacarthur/sheldon
 ## load plugins
