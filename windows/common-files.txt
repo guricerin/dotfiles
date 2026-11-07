@@ -1,9 +1,0 @@
-# setup.ps1 が Windows にリンクする home/ 配下のファイル（home/ からの相対パス）
-# 末尾が / の行は、そのディレクトリ配下のすべてのファイルを指す
-# ここに書いていないファイル（.zshrc、.tmux.conf など）は Windows にはリンクしない
-.claude/
-.config/git/
-.config/starship.toml
-.editorconfig
-.ssh/
-.vimrc

@@ -1,7 +1,14 @@
 # dotfiles
 
-- [home ディレクトリ](./home/)配下のファイルを参照するシムリンクを、`$HOME`に再帰的に作成する
-- Windows では [windows/common-files.txt](./windows/common-files.txt) に書いた home 配下のファイルと、[windows/home](./windows/home/) 配下のファイルを `%USERPROFILE%` にリンクする（[Windows](#windows) を参照）
+- 次のディレクトリ配下のファイルを参照するシムリンクを、`$HOME`（Windows では `%USERPROFILE%`）に再帰的に作成する
+
+| ディレクトリ | 置くもの | リンクする OS |
+|---|---|---|
+| [home-common](./home-common/) | どの OS でも使うもの（Claude Code、git、starship、vim、SSH、editorconfig） | すべて |
+| [home-unix](./home-unix/) | macOS・Linux でだけ使うもの（zsh、bash、tmux、sheldon、nushell、mise） | macOS・Linux（[setup.sh](./setup.sh)） |
+| [home-windows](./home-windows/) | Windows でだけ使うもの（PowerShell、WezTerm、VS Code、`.wslconfig`、git の Windows 用の設定） | Windows（[setup.ps1](./setup.ps1)） |
+
+- home-common と OS 専用のディレクトリの両方に同じパスのファイルを置くと、setup はエラーで止まる
 - 意図しないファイルがリポジトリに含まれるのを防止したいので、ディレクトリのシムリンクは作成しない
 
 ## Before Setup
@@ -59,7 +66,7 @@ GIT_SSH_COMMAND='ssh -i ~/.ssh/keys/github/id_ed25519' git clone git@github.com:
 mise install
 ```
 
-`depends.sh` で brew のツールと mise、uv tool のツールを入れてから、`mise install` で [~/.config/mise/config.toml](./home/.config/mise/config.toml) に書いたツールを入れる。`mise use --global` でツールを足すと、リンク先のこのリポジトリのファイルが書き換わるので、コミットする。
+`depends.sh` で brew のツールと mise、uv tool のツールを入れてから、`mise install` で [~/.config/mise/config.toml](./home-unix/.config/mise/config.toml) に書いたツールを入れる。`mise use --global` でツールを足すと、リンク先のこのリポジトリのファイルが書き換わるので、コミットする。
 
 ### ツールの入れ分け
 
@@ -90,8 +97,7 @@ chsh -s `which zsh`
 
 PowerShell 7 の [setup.ps1](./setup.ps1) でセットアップする。
 
-- home 配下のうち Windows でも使うもの（Claude Code、git、starship、vim、SSH、editorconfig）は [windows/common-files.txt](./windows/common-files.txt) に書く
-- Windows でしか使わないもの（PowerShell のプロファイル、WezTerm、VS Code、`.wslconfig`、git の Windows 用の設定）は [windows/home](./windows/home/) に置く
+- home-common と home-windows の配下のファイルを `%USERPROFILE%` にリンクする
 - 改行コードは [.gitattributes](./.gitattributes) で LF に揃えている。CRLF になると、Claude Code が Git Bash で動かす hook が動かない
 
 ### SSH setting of GitHub

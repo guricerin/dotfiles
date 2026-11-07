@@ -1,6 +1,6 @@
 #requires -version 7
 # Windows 用のセットアップ。setup.sh と同じく、ファイルごとのシムリンクを $env:UserProfile に作成する
-# - home/ からは windows/common-files.txt に書いたものだけ、windows/home/ からは全部をリンクする
+# - home-common/（macOS・Linux と共通）と home-windows/（Windows でだけ使う）の全部をリンクする
 # - シムリンクの作成には開発者モードが必要
 Param(
   [Alias("n")][switch]$DryRun = $false,
@@ -9,9 +9,10 @@ Param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-Set-Variable -Name DOTFILES_HOME -Option Constant -Value (Join-Path $PSScriptRoot "home")
-Set-Variable -Name WINDOWS_HOME -Option Constant -Value (Join-Path $PSScriptRoot "windows" "home")
-Set-Variable -Name COMMON_FILES -Option Constant -Value (Join-Path $PSScriptRoot "windows" "common-files.txt")
+Set-Variable -Name DOTFILES_HOMES -Option Constant -Value @(
+  (Join-Path $PSScriptRoot "home-common"),
+  (Join-Path $PSScriptRoot "home-windows")
+)
 
 function IsDeveloperMode() {
   $res = Get-ItemPropertyValue registry::HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock -Name AllowDevelopmentWithoutDevLicense -ErrorAction SilentlyContinue
@@ -34,41 +35,20 @@ function PrintExpected($message) {
   Write-Host "  [?] $message" -ForegroundColor Blue
 }
 
-# home/ 配下のパスが common-files.txt のどれかに当てはまるか。末尾が / の行はディレクトリ配下すべてに当てはまる
-function IsCommonFile($relPath, $patterns) {
-  foreach ($pattern in $patterns) {
-    if ($pattern.EndsWith("/")) {
-      if ($relPath.StartsWith($pattern)) { return $true }
-    }
-    elseif ($relPath -eq $pattern) {
-      return $true
-    }
-  }
-  return $false
-}
-
 # リンク元とリンク先の組を返す
 function DotFilePairs() {
-  $patterns = Get-Content -LiteralPath $COMMON_FILES |
-  ForEach-Object { $_.Trim() } |
-  Where-Object { $_ -ne "" -and !$_.StartsWith("#") }
-
   $pairs = @()
-  Get-ChildItem -LiteralPath $DOTFILES_HOME -File -Force -Recurse | ForEach-Object {
-    $rel = [IO.Path]::GetRelativePath($DOTFILES_HOME, $_.FullName).Replace("\", "/")
-    if (IsCommonFile -relPath $rel -patterns $patterns) {
+  foreach ($dir in $DOTFILES_HOMES) {
+    Get-ChildItem -LiteralPath $dir -File -Force -Recurse | ForEach-Object {
+      $rel = [IO.Path]::GetRelativePath($dir, $_.FullName).Replace("\", "/")
       $pairs += [PSCustomObject]@{ Rel = $rel; Src = $_.FullName }
     }
   }
-  Get-ChildItem -LiteralPath $WINDOWS_HOME -File -Force -Recurse | ForEach-Object {
-    $rel = [IO.Path]::GetRelativePath($WINDOWS_HOME, $_.FullName).Replace("\", "/")
-    $pairs += [PSCustomObject]@{ Rel = $rel; Src = $_.FullName }
-  }
 
-  # home/ と windows/home/ の両方に同じパスがあると、どちらを張るか決められない
+  # home-common/ と home-windows/ の両方に同じパスがあると、どちらを張るか決められない
   $dups = $pairs | Group-Object -Property Rel | Where-Object { $_.Count -gt 1 }
   if ($dups) {
-    $dups | ForEach-Object { PrintError -message "home/ と windows/home/ の両方にある: $($_.Name)" }
+    $dups | ForEach-Object { PrintError -message "home-common/ と home-windows/ の両方にある: $($_.Name)" }
     exit 1
   }
 
