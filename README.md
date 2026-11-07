@@ -6,7 +6,7 @@
 |---|---|---|
 | [home-common](./home-common/) | どの OS でも使うもの（Claude Code、git、starship、vim、SSH、editorconfig） | すべて |
 | [home-unix](./home-unix/) | macOS・Linux でだけ使うもの（zsh、bash、tmux、sheldon、nushell、mise） | macOS・Linux（[setup.sh](./setup.sh)） |
-| [home-windows](./home-windows/) | Windows でだけ使うもの（PowerShell、WezTerm、VS Code、`.wslconfig`、git の Windows 用の設定） | Windows（[setup.ps1](./setup.ps1)） |
+| [home-windows](./home-windows/) | Windows でだけ使うもの（PowerShell、WezTerm、`.wslconfig`、git の Windows 用の設定） | Windows（[setup.ps1](./setup.ps1)） |
 
 - home-common と OS 専用のディレクトリの両方に同じパスのファイルを置くと、setup はエラーで止まる
 - 意図しないファイルがリポジトリに含まれるのを防止したいので、ディレクトリのシムリンクは作成しない
