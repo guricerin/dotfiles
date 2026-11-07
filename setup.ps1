@@ -9,6 +9,16 @@ Param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
+# https://patorjk.com/software/taag/#p=display&f=Efti%20Wall&t=dotfiles
+Set-Variable -Name LOGO -Option Constant -Value @'
+
+        ...       #   ___                          _          .      .      _     _         |"|
+   o,*,(o o)      #  <_*_>         ()_()         _|_|_      .  .:::.      o' \,=./ `o      _|_|_       `  _ ,  '
+  8(o o)(_)Ooo    #  (o o)         (o o)         (o o)        :(o o):  .     (o o)         (o o)      -  (o)o)  -
+ooO-(_)---Ooo-----8---(_)--Ooo-ooO--`o'--Ooo-ooO--(_)--Ooo-ooO--(_)--Ooo-ooO--(_)--Ooo-ooO--(_)--Ooo--ooO'(_)--Ooo-
+
+'@
+
 Set-Variable -Name DOTFILES_HOMES -Option Constant -Value @(
   (Join-Path $PSScriptRoot "home-common"),
   (Join-Path $PSScriptRoot "home-windows")
@@ -25,10 +35,6 @@ function PrintError($message) {
 
 function PrintWarn($message) {
   Write-Host "  [!] $message" -ForegroundColor Yellow
-}
-
-function PrintSuccess($message) {
-  Write-Host "  [o] $message" -ForegroundColor Green
 }
 
 function PrintExpected($message) {
@@ -89,7 +95,6 @@ function BuildSymlinks($pairs) {
       Remove-Item -LiteralPath $dst -Force
     }
     New-Item -ItemType SymbolicLink -Path $dst -Value $src > $null
-    PrintSuccess -message "$dst -> $src"
   }
 }
 
@@ -116,8 +121,10 @@ function Main() {
   PrintExpectation -pairs $pairs
   Write-Host
   ConfirmApply
+  Write-Host $LOGO
   Write-Host "apply`n"
   BuildSymlinks -pairs $pairs
+  Write-Host "`n ようこそ、$env:UserName の世界へ。`n そして、あなたの帰還に感謝します。"
 }
 
 Main
