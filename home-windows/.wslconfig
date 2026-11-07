@@ -1,0 +1,5 @@
+# https://learn.microsoft.com/ja-jp/windows/wsl/wsl-config#wslconfig
+[wsl2]
+networkingMode=mirrored
+# https://learn.microsoft.com/ja-jp/windows/wsl/networking#dns-tunneling
+dnsTunneling=true
