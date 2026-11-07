@@ -13,5 +13,9 @@ brew install \
   gh \
   ghq \
   mise \
-  nushell
+  nushell \
+  uv
 $(brew --prefix)/opt/fzf/install
+
+# brew にない Python 製の CLI ツール
+uv tool install skillspector
