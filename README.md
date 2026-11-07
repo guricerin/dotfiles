@@ -1,6 +1,7 @@
 # dotfiles
 
 - [home ディレクトリ](./home/)配下のファイルを参照するシムリンクを、`$HOME`に再帰的に作成する
+- Windows では [windows/common-files.txt](./windows/common-files.txt) に書いた home 配下のファイルと、[windows/home](./windows/home/) 配下のファイルを `%USERPROFILE%` にリンクする（[Windows](#windows) を参照）
 - 意図しないファイルがリポジトリに含まれるのを防止したいので、ディレクトリのシムリンクは作成しない
 
 ## Before Setup
@@ -84,3 +85,63 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 echo `which zsh` | sudo tee -a /etc/shells
 chsh -s `which zsh`
 ```
+
+## Windows
+
+PowerShell 7 の [setup.ps1](./setup.ps1) でセットアップする。
+
+- home 配下のうち Windows でも使うもの（Claude Code、git、starship、vim、SSH、editorconfig）は [windows/common-files.txt](./windows/common-files.txt) に書く
+- Windows でしか使わないもの（PowerShell のプロファイル、WezTerm、VS Code、`.wslconfig`、git の Windows 用の設定）は [windows/home](./windows/home/) に置く
+- 改行コードは [.gitattributes](./.gitattributes) で LF に揃えている。CRLF になると、Claude Code が Git Bash で動かす hook が動かない
+
+### SSH setting of GitHub
+
+```pwsh
+$p = "~/.ssh/keys/github"
+mkdir -p $p
+ssh-keygen -t ed25519 -f "$p/id_ed25519"
+Get-Content "$p/id_ed25519.pub" | clip
+# paste pub-key to GitHub -> Settings -> SSH and GPG keys -> SSH keys
+```
+
+### Clone this repo
+
+```pwsh
+# ~/.ssh/config は setup 後にリンクされるので、この時点では使う鍵を直接指定する
+$env:GIT_SSH_COMMAND = "ssh -i ~/.ssh/keys/github/id_ed25519"
+git clone git@github.com:guricerin/dotfiles.git ~/workspace/github.com/guricerin/dotfiles
+Remove-Item Env:GIT_SSH_COMMAND
+```
+
+### Enable running `.ps1` scripts
+
+```pwsh
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+```
+
+Git で clone したファイルはローカルのスクリプトとして扱われるので、RemoteSigned で実行できる。
+
+### Install tools
+
+```pwsh
+.\scripts\depends.ps1
+```
+
+winget・scoop・uv tool でツールを入れる。scoop は先に [公式の手順](https://scoop.sh/) で入れておく。
+
+### Setup
+
+シムリンクを作るには、「設定 → システム → 開発者向け」で開発者モードを有効にしておく。
+
+```pwsh
+.\setup.ps1 -DryRun   # 張るリンクを表示するだけ
+.\setup.ps1           # 表示したあと、続けるかを聞く。聞かずに apply するときは -Yes
+```
+
+### Install Claude Code
+
+```pwsh
+irm https://claude.ai/install.ps1 | iex
+```
+
+hook と Bash ツールは Git Bash で動く。ghq の root は Mac・WSL2 と同じ `~/workspace` になる。
