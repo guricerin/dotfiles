@@ -14,17 +14,42 @@ ooO-(_)---Ooo-----8---(_)--Ooo-ooO--`o\'--Ooo-ooO--(_)--Ooo-ooO--(_)--Ooo-ooO--(
 '
 
 readonly SCRIPT_ROOT=$(cd $(dirname $0); pwd)
-readonly DOTFILES_HOME="$SCRIPT_ROOT/home"
+# Windows と共通のファイルと、macOS・Linux でだけ使うファイル。Windows 用は home-windows/ にあり、setup.ps1 がリンクする
+readonly DOTFILES_HOMES=("$SCRIPT_ROOT/home-common" "$SCRIPT_ROOT/home-unix")
+
+declare -ga SRCS=()
+declare -ga DSTS=()
+
+# リンク元とリンク先の組を SRCS と DSTS に集める
+collect_pairs() {
+  for home in "${DOTFILES_HOMES[@]}"; do
+    for src in $(find $home -type f); do
+      SRCS+=("$src")
+      DSTS+=("${src/$home/$HOME}") # e.g. /home/username/dotfiles/home-unix/.zshrc => /home/username/.zshrc
+    done
+  done
+
+  # home-common/ と home-unix/ の両方に同じパスがあると、どちらを張るか決められない
+  local dups=$(printf '%s\n' "${DSTS[@]}" | sort | uniq -d)
+  if [ -n "$dups" ]; then
+    for dup in $dups; do
+      printf "\e[0;31m  [x] home-common/ と home-unix/ の両方にある: ${dup/$HOME\//}\e[0m\n"
+    done
+    exit 1
+  fi
+}
 
 build_symlinks() {
   # 意図しないファイルがリポジトリに含まれるのを防止したいので、ディレクトリのシムリンクは作成しない
-  for src in $(find $DOTFILES_HOME -type f); do
-    local dst=${src/$DOTFILES_HOME/$(echo $HOME)} # e.g. /home/username/dotfiles/home/.zshrc => /home/username/.zshrc
+  for i in "${!SRCS[@]}"; do
+    local src=${SRCS[$i]}
+    local dst=${DSTS[$i]}
     local parent=$(dirname $dst)
     if [ ! -d $parent ]; then
       mkdir -p $parent
     fi
-    if [ -f $dst ]; then
+    # シムリンクでない実ファイルだけを .bak に退避する
+    if [ -f $dst ] && [ ! -L $dst ]; then
       cp $dst $dst.bak
     fi
     ln -snf $src $dst
@@ -49,9 +74,8 @@ confirm_apply() {
 }
 
 print_expectation() {
-  for src in $(find $DOTFILES_HOME -type f); do
-    local dst=${src/$DOTFILES_HOME/$(echo $HOME)}
-    printf "\e[0;34m  [?] $dst -> $src\e[0m\n"
+  for i in "${!SRCS[@]}"; do
+    printf "\e[0;34m  [?] ${DSTS[$i]} -> ${SRCS[$i]}\e[0m\n"
   done
 }
 
@@ -75,6 +99,7 @@ parse_args() {
 
 main() {
   parse_args "$@"
+  collect_pairs
   if [ $IS_DRY_RUN -eq 1 ]; then
     echo -e "dry-run\n"
     print_expectation

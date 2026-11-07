@@ -12,7 +12,8 @@ fi
 
 # /dev/tty が使えないときは、親プロセスをたどって端末を探す
 pid=$PPID
-while [ "$pid" -gt 1 ]; do
+# Windows の Git Bash の ps は -o を受け付けず pid が空になるので、そこで諦める
+while [ -n "$pid" ] && [ "$pid" -gt 1 ]; do
   tty=$(ps -o tty= -p "$pid" | tr -d ' ')
   if [ -n "$tty" ] && [ "$tty" != "?" ]; then
     printf '\a' > "/dev/$tty" 2>/dev/null

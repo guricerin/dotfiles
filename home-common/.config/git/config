@@ -1,0 +1,51 @@
+[user]
+	name = guricerin
+	email = chanbo1e9@gmail.com
+[includeIf "gitdir:~/workspace/github.com/sensyn-robotics/"]
+	path = ~/.config/git/sensyn-robotics.config
+[ghq]
+	root = ~/workspace
+[core]
+	editor = vim
+	hooksPath = ~/.config/git/hooks
+	# 日本語のファイル名を \343... のようにエスケープせずに表示する
+	quotepath = false
+[color]
+	ui = auto
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+[color "diff"]
+	meta = yellow bold
+	commit = green bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+	newMoved = cyan
+	oldMoved = blue
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = "red bold 52"
+	newNormal = "green bold"
+	newHighlight = "green bold 22"
+[color "branch"]
+	current = green reverse
+	local = yellow
+	remote = green
+[init]
+	defaultBranch = main
+[alias]
+	st = status
+	br = branch
+	cm = commit
+	graph = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
+	sw = switch
+[submodule]
+	recurse = true
+[pull]
+	rebase = false
+# Windows でだけ使う設定。上の設定を上書きできるように最後に読む。ファイルがなければ git は黙って飛ばす
+[include]
+	path = ~/.config/git/windows.config

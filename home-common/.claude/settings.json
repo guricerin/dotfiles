@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/check-skill-md.py",
+            "command": "uv run --no-project --quiet ~/.claude/hooks/check-skill-md.py",
             "timeout": 30
           }
         ]

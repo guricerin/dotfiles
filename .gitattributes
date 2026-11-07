@@ -1,0 +1,2 @@
+# Windows で clone しても改行を LF のままにする。CRLF になると、Git Bash で動かす hook のシェルスクリプトが動かない
+* text=auto eol=lf

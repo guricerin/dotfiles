@@ -41,7 +41,7 @@ description: 全プロジェクトの Claude Code の会話履歴（~/.claude/pr
 - 期間（任意）: 「直近 3 日」「10/20 から」など、始まりが読み取れるものだけを指定とみなす。指定がなければ、前回の実行時刻（`~/.claude/state/harness-review/last-run.json`）から今まで。前回の記録がなければ直近 7 日
 - 会話の履歴: `~/.claude/projects/*/*.jsonl`（全プロジェクト。サブエージェントの会話は除く）
 - 今のハーネス:
-  - グローバル: `~/.claude/CLAUDE.md`、`~/.claude/settings.json`、`~/.claude/hooks/`、`~/.claude/skills/*/SKILL.md`、`~/.claude/templates/`。実体は dotfiles リポジトリ（`~/workspace/github.com/guricerin/dotfiles/home/.claude/`）にある
+  - グローバル: `~/.claude/CLAUDE.md`、`~/.claude/settings.json`、`~/.claude/hooks/`、`~/.claude/skills/*/SKILL.md`、`~/.claude/templates/`。実体は dotfiles リポジトリ（`~/workspace/github.com/guricerin/dotfiles/home-common/.claude/`）にある
   - プロジェクトごと: 期間内に出てきた各プロジェクトの `CLAUDE.md`・`AGENTS.md`・`.claude/settings.json`
   - memory: `~/.claude/projects/*/memory/`
 
