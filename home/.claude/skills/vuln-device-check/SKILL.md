@@ -21,7 +21,7 @@ description: 脆弱性やセキュリティ事案（CVE 番号、CA の侵害な
   - 調査のあとで、ソフトの更新・アンインストール・古い版の削除・設定の変更をすること。対象とコマンドを並べて示し、承認された項目だけを実行する
   - pkb の保存先フォルダ（`security/output/`）がない、または Git の管理外になっていない（`git -C <pkb> check-ignore -q security/output/x.md` が終了コード 1）。作る・そのまま書くの前に確認する
 - **想定外**:
-  - Claude Code が Windows 上で直接（WSL2 ではなく）動いている。このスキルは dotfiles で配っていて、Windows 側（madobe）には入らない前提のため
+  - Claude Code が Windows 上で直接（WSL2 ではなく）動いている。dotfiles は Windows にもこのスキルを配るが、調べる手順は Mac と WSL2（`powershell.exe` 経由で Windows も調べる）の前提で書いている
   - WSL2 なのに `powershell.exe` を呼べない（Windows との連携が無効になっている）
   - 調べるためのコマンドが `sudo` やパスワードの入力を求めた
 
