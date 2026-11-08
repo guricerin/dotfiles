@@ -1,0 +1,2 @@
+# Claude Code の「Yes, and don't ask again」で許可したコマンド（秘密情報を含みうる）が残るため、どのリポジトリでもコミットしない
+**/.claude/settings.local.json
