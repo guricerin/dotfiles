@@ -2,12 +2,6 @@
 ## alias
 
 Set-Alias -Name "note" -Value "C:\bin\Notepad++\notepad++.exe"
-# docker
-Set-Alias -Name "dcc" -Value docker-compose
-function Docker-Exec() {
-    docker exec -it $args
-}
-Set-Alias -Name "dce" -Value Docker-Exec
 
 # -------------------------------------------------------------------------------------------
 ## abbr
