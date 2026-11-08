@@ -20,6 +20,20 @@ function gs() {
 }
 
 # -------------------------------------------------------------------------------------------
+## Ctrl + G で リポジトリ移動
+# home-unix/.zshrc の ghq-fzf-cd と同じ動き。ghq と fzf がないときは割り当てない
+if ((Get-Command ghq -ErrorAction SilentlyContinue) -and (Get-Command fzf -ErrorAction SilentlyContinue)) {
+    Set-PSReadLineKeyHandler -Chord Ctrl+g -BriefDescription "ghq-fzf-cd" -Description "ghq のリポジトリを fzf で選んで移動する" -ScriptBlock {
+        $dir = ghq list --full-path | fzf
+        if ($dir) {
+            Set-Location $dir
+        }
+        # 移動先をプロンプト（starship）に反映する
+        [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
+    }
+}
+
+# -------------------------------------------------------------------------------------------
 ## OSC 7
 # カレントディレクトリを OSC 7 で端末に知らせる（WezTerm のタブ名に使う）
 # PowerShell の cd はプロセスのカレントディレクトリを変えないため、WezTerm からは見えない
