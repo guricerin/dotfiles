@@ -1,6 +1,6 @@
 ---
 name: vuln-device-check
-description: 脆弱性やセキュリティ事案（CVE 番号、CA の侵害など）について、この端末が影響を受けるかを読み取り専用で調べ、「影響あり・修正済み/関係なし・未確認」の表にして会話で報告し、pkb の security/output/ に Markdown で保存する。Mac と WSL2 で動き、WSL2 では powershell.exe を通して Windows 側も調べる。更新や設定の変更は承認を得てから行う。「CVE-2026-xxxx について、この端末の安全性を調査して」「この脆弱性、俺の PC 大丈夫？」「Mac に影響ある？」「Windows は大丈夫？」「〇〇の脆弱性、手元で確認して」など、手元の端末が影響を受けるかを知りたい場面では、このスキルを使う。Azure の VM や AKS などインフラ側の影響調査には使わない。
+description: 脆弱性やセキュリティ事案（CVE 番号、CA の侵害など）について、この端末が影響を受けるかを読み取り専用で調べ、「影響あり・修正済み/関係なし・未確認」の表にして会話で報告し、pkb の security/output/ に Markdown で保存する。Mac・WSL2・Windows（Claude Code を直接実行）で動き、WSL2 では powershell.exe を通して Windows 側も調べる。更新や設定の変更は承認を得てから行う。「CVE-2026-xxxx について、この端末の安全性を調査して」「この脆弱性、俺の PC 大丈夫？」「Mac に影響ある？」「Windows は大丈夫？」「〇〇の脆弱性、手元で確認して」など、手元の端末が影響を受けるかを知りたい場面では、このスキルを使う。Azure の VM や AKS などインフラ側の影響調査には使わない。
 ---
 
 # 端末の脆弱性チェック
@@ -21,7 +21,6 @@ description: 脆弱性やセキュリティ事案（CVE 番号、CA の侵害な
   - 調査のあとで、ソフトの更新・アンインストール・古い版の削除・設定の変更をすること。対象とコマンドを並べて示し、承認された項目だけを実行する
   - pkb の保存先フォルダ（`security/output/`）がない、または Git の管理外になっていない（`git -C <pkb> check-ignore -q security/output/x.md` が終了コード 1）。作る・そのまま書くの前に確認する
 - **想定外**:
-  - Claude Code が Windows 上で直接（WSL2 ではなく）動いている。dotfiles は Windows にもこのスキルを配るが、調べる手順は Mac と WSL2（`powershell.exe` 経由で Windows も調べる）の前提で書いている
   - WSL2 なのに `powershell.exe` を呼べない（Windows との連携が無効になっている）
   - 調べるためのコマンドが `sudo` やパスワードの入力を求めた
 
@@ -48,6 +47,7 @@ description: 脆弱性やセキュリティ事案（CVE 番号、CA の侵害な
 - 調べる範囲（任意）: 指定がなければ、実行中の端末で調べられるものすべて
   - Mac で実行: macOS
   - WSL2 で実行: WSL2 の Linux と、ホストの Windows の両方
+  - Windows で直接実行: Windows だけ。WSL2 の Linux の中は調べず、表に「❓ 未確認（WSL2 で実行し直せば調べられる）」と書く。Windows 側から WSL2 の中を覗く方法は、ディストリビューションの起動や書き込みが起きうるため使わない
 - 保存先: `~/workspace/github.com/guricerin/pkb/security/output/`（Git の管理外）
 
 ## 手順
@@ -60,10 +60,12 @@ description: 脆弱性やセキュリティ事案（CVE 番号、CA の侵害な
 2. **実行環境を判定する。** OS ごとに調べ方が違うため。
 
    ```bash
-   uname -s                                   # Darwin なら Mac
+   uname -s                                   # Darwin なら Mac。MINGW64_NT・MSYS_NT で始まれば Windows で直接実行（Bash ツールは Git Bash）
    grep -qi microsoft /proc/version && echo wsl2
    powershell.exe -NoProfile -Command '$PSVersionTable.PSVersion'   # WSL2 のとき。Windows を調べられるか
    ```
+
+   Windows で直接実行しているときは、Windows を調べるコマンドを `powershell.exe` 経由ではなく PowerShell ツールでそのまま実行する（引用符の入れ子で崩れないようにするため）。ファイルの検索や JSON の読み取りは Git Bash でもよい。
 
 3. **候補を洗い出して版を調べる。** すべて読み取りだけで行う。1 で挙げた部品と、それを中に持っていそうな製品を探す。次は主な調べ方で、脆弱性に合わせて足し引きする。
 
@@ -74,8 +76,9 @@ description: 脆弱性やセキュリティ事案（CVE 番号、CA の侵害な
    | ライブラリのリンク先 | Mac は `otool -L <バイナリ>`、Linux は `ldd <バイナリ>`。どの版を実際に使っているかを確かめる |
    | Mac のアプリ | `defaults read /Applications/<名前>.app/Contents/Info.plist CFBundleShortVersionString` |
    | 言語のランタイム | `mise ls`、`node -v`、`python3 --version`、`bun --version` など。`which -a` で複数入っていないかも見る |
+   | 言語のランタイム（Windows） | PowerShell の `Get-Command -All <名前>` で場所も見る。`AppData\Local\Microsoft\WindowsApps` の `python.exe`・`python3.exe` は Microsoft Store への案内で、Python は入っていない。winget で入れたものは `AppData\Local\Microsoft\WinGet\Links` にあり、Git Bash の PATH に入っていないことがあるので、そこも直接見る。uv が入れた Python は `uv python list --only-installed` |
    | WSL2 の Linux | `cat /etc/os-release`、`dpkg -l <名前>` |
-   | Windows 本体 | `powershell.exe -NoProfile -Command 'Get-CimInstance Win32_OperatingSystem \| Select Caption,Version,BuildNumber; Get-HotFix \| Sort InstalledOn -Desc \| Select -First 10'` |
+   | Windows 本体（WSL2 から。Windows で直接実行なら `-Command` の中身を PowerShell ツールで実行） | `powershell.exe -NoProfile -Command 'Get-CimInstance Win32_OperatingSystem \| Select Caption,Version,BuildNumber; Get-HotFix \| Sort InstalledOn -Desc \| Select -First 10'` |
    | Windows のアプリ | レジストリのアンインストール情報（`HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*`、`HKLM:\Software\WOW6432Node\...\Uninstall\*`、`HKCU:\...\Uninstall\*`）の `DisplayName`・`DisplayVersion`。`winget list` は初回に規約への同意を求めて書き込みが起きることがあるので使わない |
    | 証明書ストア | Mac は `security find-certificate -a -c <名前>`、Windows は `Get-ChildItem Cert:\LocalMachine\Root,Cert:\LocalMachine\CA,Cert:\CurrentUser\Root`、Linux は `/etc/ssl/certs`。CA の事案では、クロス署名による別の信頼経路も確かめる |
    | コンテナ | `docker images` で該当しそうなイメージがあれば挙げる（中までは調べず「未確認」とする） |
@@ -96,7 +99,7 @@ description: 脆弱性やセキュリティ事案（CVE 番号、CA の侵害な
 ## 出力先
 
 - **ファイル**: `~/workspace/github.com/guricerin/pkb/security/output/<YYYY-MM-DD-HH-MM>-<端末>-<対象>.md`
-  - `<端末>` は `mac` か `wsl2`（WSL2 の Linux と Windows の両方を含む）
+  - `<端末>` は `mac`、`wsl2`（WSL2 の Linux と Windows の両方を含む）、`windows`（Windows で直接実行。WSL2 の Linux は含まない）のどれか
   - `<対象>` は CVE 番号、なければ事案を表す英小文字とハイフンの短い名前（例: `emudhra-ca`）
   - 形式:
 
