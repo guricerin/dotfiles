@@ -20,6 +20,5 @@ indent_style = tab
 [*.rs]
 indent_size = 4
 
-# C#（Unity など）は 4 スペースが慣習
 [*.cs]
 indent_size = 4
