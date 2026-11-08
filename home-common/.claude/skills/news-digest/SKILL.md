@@ -55,11 +55,11 @@ Auth0・セキュリティ関連・ソフトウェアの更新・AI・札幌の�
 2. **スクリプトで記事を集める。** 取得・日付の解析・期間での絞り込み・重複除去は毎回同じ処理なので、スクリプトに任せる。出力は大きい（1週間分で 150KB 前後）ので、会話に直接出さずスクラッチパッドなどの一時ファイルに保存して読む。
 
    ```bash
-   python3 <このスキルのディレクトリ>/scripts/fetch_news.py --output-dir <出力先> > <一時ファイル>.json
+   uv run --script <このスキルのディレクトリ>/scripts/fetch_news.py --output-dir <出力先> > <一時ファイル>.json
    # 期間を指定された場合
-   python3 <このスキルのディレクトリ>/scripts/fetch_news.py --output-dir <出力先> --since 2026-10-14T09:00 > <一時ファイル>.json
+   uv run --script <このスキルのディレクトリ>/scripts/fetch_news.py --output-dir <出力先> --since 2026-10-14T09:00 > <一時ファイル>.json
    # 一部のグループだけを求められた場合
-   python3 <このスキルのディレクトリ>/scripts/fetch_news.py --output-dir <出力先> --groups sapporo > <一時ファイル>.json
+   uv run --script <このスキルのディレクトリ>/scripts/fetch_news.py --output-dir <出力先> --groups sapporo > <一時ファイル>.json
    ```
 
    `--groups` を付けると、出力ファイル名は `YYYY-MM-DD-HH-MM-sapporo.md` のように接尾辞つきになり、次に全部をまとめるときの「前回」としては数えない。一部だけのまとめを起点にすると、ほかのグループの記事が抜けてしまうため。
