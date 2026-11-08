@@ -1,22 +1,38 @@
 ﻿# -------------------------------------------------------------------------------------------
 ## alias
 
-# ls
-Set-Alias -Name "l" -Value Get-ChildItem
-Set-Alias -Name "ll" -Value Get-ChildItem
 Set-Alias -Name "note" -Value "C:\bin\Notepad++\notepad++.exe"
-# git
-Set-Alias -Name "g" -Value git
-# docker
-Set-Alias -Name "dc" -Value docker
-Set-Alias -Name "dcc" -Value docker-compose
-function Docker-Exec() {
-    docker exec -it $args
-}
-Set-Alias -Name "dce" -Value Docker-Exec
 
-function gs() {
-    git status
+# -------------------------------------------------------------------------------------------
+## abbr
+# fish の abbr、home-unix/.zshrc の zsh-abbr と同じく、略語を元のコマンドに展開する
+# スペースか Enter を押したときに、コマンドの位置（行頭か、; | & の直後）の略語を展開する
+$global:Abbr = @{
+    l  = 'ls'
+    g  = 'git'
+    gs = 'git status'
+    f  = 'fzf'
+}
+
+function global:Expand-Abbr {
+    $line = $null
+    $cursor = $null
+    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
+    $before = $line.Substring(0, $cursor)
+    if ($before -match '(?:^|[;|&])\s*([^\s;|&]+)$' -and $global:Abbr.ContainsKey($Matches[1])) {
+        $word = $Matches[1]
+        [Microsoft.PowerShell.PSConsoleReadLine]::Replace($cursor - $word.Length, $word.Length, $global:Abbr[$word])
+    }
+}
+
+Set-PSReadLineKeyHandler -Key Spacebar -BriefDescription "abbr-expand-space" -Description "略語を展開してからスペースを入れる" -ScriptBlock {
+    Expand-Abbr
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert(' ')
+}
+
+Set-PSReadLineKeyHandler -Key Enter -BriefDescription "abbr-expand-enter" -Description "略語を展開してから実行する" -ScriptBlock {
+    Expand-Abbr
+    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
 }
 
 # -------------------------------------------------------------------------------------------
