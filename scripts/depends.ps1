@@ -8,6 +8,7 @@
   "jqlang.jq"            # Claude Code の hook（assign-pr-to-me.sh）で使う
   "astral-sh.uv"         # Claude Code の hook（check-skill-md.py）を uv run で動かす
   "Gitleaks.Gitleaks"
+  "junegunn.fzf"         # プロファイルの Ctrl+G（ghq のリポジトリへ移動）で使う
 ) | ForEach-Object {
   Write-Host "Installing $_"
   winget install -e --id $_
