@@ -22,9 +22,10 @@
 }
 
 # Python 製の CLI ツール。~/.local/bin に入る
+# uv は最新の Python（3.15）を選ぶが、pyyaml などに 3.15 用の wheel がなく、C++ のビルドツールなしではビルドに失敗するので 3.13 に固定する
 @(
   "pre-commit" # グローバルの pre-commit フック（~/.config/git/hooks/pre-commit）で使う
 ) | ForEach-Object {
   Write-Host "Installing $_"
-  uv tool install $_
+  uv tool install --python 3.13 $_
 }
