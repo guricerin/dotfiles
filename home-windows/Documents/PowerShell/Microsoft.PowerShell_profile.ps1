@@ -1,9 +1,6 @@
 ﻿# -------------------------------------------------------------------------------------------
 ## alias
 
-# ls
-Set-Alias -Name "l" -Value Get-ChildItem
-Set-Alias -Name "ll" -Value Get-ChildItem
 Set-Alias -Name "note" -Value "C:\bin\Notepad++\notepad++.exe"
 # docker
 Set-Alias -Name "dcc" -Value docker-compose
@@ -17,13 +14,10 @@ Set-Alias -Name "dce" -Value Docker-Exec
 # fish の abbr、home-unix/.zshrc の zsh-abbr と同じく、略語を元のコマンドに展開する
 # スペースか Enter を押したときに、コマンドの位置（行頭か、; | & の直後）の略語を展開する
 $global:Abbr = @{
+    l  = 'ls'
     g  = 'git'
     gs = 'git status'
     f  = 'fzf'
-    d  = 'docker'
-    dc = 'docker compose'
-    k  = 'kubectl'
-    tf = 'terraform'
 }
 
 function global:Expand-Abbr {
