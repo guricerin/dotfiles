@@ -60,6 +60,9 @@
       }
     }
   },
+  "env": {
+    "CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE": "1"
+  },
   "language": "japanese",
   "effortLevel": "high",
   "tui": "fullscreen",
