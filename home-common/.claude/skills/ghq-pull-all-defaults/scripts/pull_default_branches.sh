@@ -167,5 +167,7 @@ if ! command -v ghq >/dev/null; then
   exit 1
 fi
 
-GHQ_ROOT=$(ghq root)
-ghq list --full-path | xargs -P "$JOBS" -I{} bash "$0" --one "$GHQ_ROOT" "$DRY_RUN" {} | sort
+# Windows（Git Bash）では ghq が C:\Users\... のように \ 区切りのパスを返す。
+# xargs は \ をエスケープとして消してしまうので、先に / へそろえる（Mac・WSL2 では変化なし）。
+GHQ_ROOT=$(ghq root | tr '\\' '/')
+ghq list --full-path | tr '\\' '/' | xargs -P "$JOBS" -I{} bash "$0" --one "$GHQ_ROOT" "$DRY_RUN" {} | sort
