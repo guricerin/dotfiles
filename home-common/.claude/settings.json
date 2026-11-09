@@ -67,5 +67,8 @@
   "effortLevel": "high",
   "tui": "fullscreen",
   "showThinkingSummaries": true,
-  "theme": "dark-daltonized"
+  "theme": "dark-daltonized",
+  "permissions": {
+    "defaultMode": "auto"
+  }
 }
