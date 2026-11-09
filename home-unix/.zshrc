@@ -123,6 +123,13 @@ abbr -S dc='docker compose' >> /dev/null
 abbr -S k='kubectl' >> /dev/null
 abbr -S tf='terraform' >> /dev/null
 
+# Claude Code のシェルでは、グロブが何にも当てはまらなくてもエラーで止めない
+## zsh は既定で `no matches found` を出してコマンドを実行せず、`2>/dev/null` でも消えない
+## nullglob だと `ls foo*` が引数なしの `ls` になるので、bash と同じくパターンをそのまま渡す
+if [[ -n "$CLAUDECODE" ]]; then
+  unsetopt nomatch
+fi
+
 # カレントディレクトリを OSC 7 で端末に知らせる
 ## WezTerm のタブ名に使う。WSL では WezTerm から zsh のカレントディレクトリが見えないため
 _osc7_cwd() {
